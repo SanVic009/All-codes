@@ -1,0 +1,6 @@
+Subsidy_id,Farmer_id,Subsidy_status,Subsidy_type,Privilege_amount
+1,4,Rejected,Direct,8815
+2,16,Pending,Direct,2270
+3,15,Pending,Direct,1662
+4,10,Pending,Direct,5304
+5,3,Approved,Direct,2752

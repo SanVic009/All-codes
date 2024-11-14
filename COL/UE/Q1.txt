@@ -1,0 +1,11 @@
+Q Explain the brief history of R programming and its major application areas.
+What are the characteristic features of R programming and how is it
+different from other programming languages. Describe the major
+advantages and disadvantages of R.
+
+- Developed by ross lhaka and robert at the University of Auckland, New Zealand
+
+- Believed to be named so after the intials of both the founders
+
+- Conceived in 1992, alpha released in 1995 and beta released in 2000;
+

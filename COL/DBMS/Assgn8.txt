@@ -1,0 +1,166 @@
+~~~~~~~~~~~~~~~ CREATING TABLES ~~~~~~~~~~~~~~~
+
+create table employees(
+    EMPLOYEE_ID int primary key,
+    FIRST_NAME varchar(20),
+    LAST_NAME varchar(20) not null,
+    EMAIL varchar(30) not null unique,
+    PHONE_NUMBER varchar(30) not null unique,
+    HIRE_DATE date not null,
+    JOB_ID varchar(10) not null,
+    SALARY decimal(8,2) not null
+);
+
+
+show tables;
++-----------------+
+| Tables_in_assgn |
++-----------------+
+| employee        |
++-----------------+
+
+create table new_sal (
+    employee_id int primary key,
+    employee_name varchar(100) not null,
+    date_of_hire date not null,
+    prev_sal decimal(10, 2) not null,
+    new_sal decimal(10, 2) not null,
+    time_in_company int not null
+);
+
++-----------------+
+| Tables_in_assgn |
++-----------------+
+| employee        |
+| new_sal         |
++-----------------+
+2 rows in set (0.00 sec)
+
+
+~~~~~~~~~~~~~~~ INSERTING VALUES ~~~~~~~~~~~~~~~
+
+
+INSERT INTO employees (
+    EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY
+) VALUES
+    (100, 'Steven', 'King', 'SKING', '515.123.4567', '2003-06-17', 'AD_PRES', 24000.00),
+    (101, 'Neena', 'Kochhar', 'NKOCHHAR', '515.123.4568', '2005-09-21', 'AD_VP', 17000.00),
+    (102, 'Lex', 'De Haan', 'LDEHAAN', '515.123.4569', '2001-01-13', 'AD_VP', 17000.00),
+    (103, 'Alexander', 'Hunold', 'AHUNOLD', '590.423.4567', '2006-01-03', 'IT_PROG', 9000.00),
+    (104, 'Bruce', 'Ernst', 'BERNST', '590.423.4568', '2007-05-21', 'IT_PROG', 6000.00),
+    (105, 'David', 'Austin', 'DAUSTIN', '590.423.4569', '2005-06-25', 'IT_PROG', 4800.00),
+    (106, 'Valli', 'Pataballa', 'VPATABAL', '590.423.4560', '2006-02-05', 'IT_PROG', 4800.00),
+    (107, 'Diana', 'Lorentz', 'DLORENTZ', '590.423.5567', '2007-02-07', 'IT_PROG', 4200.00),
+    (108, 'Nancy', 'Greenberg', 'NGREENBE', '515.124.4569', '2002-08-17', 'FI_MGR', 12008.00),
+    (109, 'Daniel', 'Faviet', 'DFAVIET', '515.124.4169', '2002-08-16', 'FI_ACCOUNT', 9000.00),
+    (110, 'John', 'Chen', 'JCHEN', '515.124.4269', '2005-09-28', 'FI_ACCOUNT', 8200.00),
+    (111, 'Ismael', 'Sciarra', 'ISCIARRA', '515.124.4369', '2005-09-30', 'FI_ACCOUNT', 7700.00),
+    (112, 'Jose Manuel', 'Urman', 'JMURMAN', '515.124.4469', '2006-03-07', 'FI_ACCOUNT', 7800.00),
+    (113, 'Luis', 'Popp', 'LPOPP', '515.124.4567', '2007-12-07', 'FI_ACCOUNT', 6900.00),
+    (114, 'Den', 'Raphaely', 'DRAPHEAL', '515.127.4561', '2002-12-07', 'PU_MAN', 11000.00),
+    (115, 'Alexander', 'Khoo', 'AKHOO', '515.127.4562', '2003-05-18', 'PU_CLERK', 3100.00),
+    (116, 'Shelli', 'Baida', 'SBAIDA', '515.127.4563', '2005-12-24', 'PU_CLERK', 2900.00),
+    (117, 'Sigal', 'Tobias', 'STOBIAS', '515.127.4564', '2005-07-24', 'PU_CLERK', 2800.00),
+    (118, 'Guy', 'Himuro', 'GHIMURO', '515.127.4565', '2006-11-15', 'PU_CLERK', 2600.00),
+    (119, 'Karen', 'Colmenares', 'KCOLMENA', '515.127.4566', '2007-08-10', 'PU_CLERK', 2500.00),
+    (120, 'Matthew', 'Weiss', 'MWEISS', '650.123.1234', '2004-07-18', 'ST_MAN', 8000.00);
+
+~~~~~~~~~~~~~~~ CREATING PROCEDURE ~~~~~~~~~~~~~~~
+
+delimiter #
+create procedure new_sal2(IN e_id int)
+begin
+
+    declare sal int;
+    declare h_date date;
+    declare prev_sal int;
+    declare v_employee_name varchar(100);
+
+    select
+        e.hire_date,
+        e.salary,
+        concat(e.first_name, ' ', e.last_name)
+    into
+        h_date,
+        prev_sal,
+        v_employee_name
+    from employees e
+    where e.employee_id = e_id;
+
+    if abs(timestampdiff(year, curdate(), h_date)) < 2 then
+        set sal = prev_sal + (prev_sal * 0.05);
+    elseif abs(timestampdiff(year, curdate(), h_date)) between 2 and 5 then
+        set sal = prev_sal + (prev_sal * 0.07);
+    elseif abs(timestampdiff(year, curdate(), h_date)) > 5 then
+       set sal = prev_sal + (prev_sal * 0.1);
+    else 
+        select("There was an error!!");
+    end if;
+
+    insert into new_sal(employee_id, employee_name, date_of_hire, prev_sal, new_sal, time_in_company) values
+    (e_id, v_employee_name, h_date, prev_sal, sal, abs(timestampdiff(year, curdate(), h_date)));
+    
+end#
+delimiter ;
+
+
+~~~~~~~~~~~~~~~ CREATING CURSOR ~~~~~~~~~~~~~~~
+
+
+delimiter #
+create procedure new_sal_table2()
+begin
+    declare v_employee_id int;
+    declare done int default 0;
+
+    declare c1 cursor for
+        select
+            e.employee_id
+        from employees e;
+
+    declare continue handler for not found set done = 1;
+
+    open c1;
+    repeat
+        fetch c1 into v_employee_id;
+        if done=0 then 
+            call new_sal2(v_employee_id);
+        end if;
+    until done end repeat;
+    close c1;
+
+end#    
+delimiter ;
+
+~~~~~~~~~~~~~~~ RUNNING CURSOR ~~~~~~~~~~~~~~~
+
+call new_sal_table2();
+Query OK, 0 rows affected (0.12 sec)
+
+select * from new_sal;
++-------------+-------------------+--------------+----------+----------+-----------------+
+| employee_id | employee_name     | date_of_hire | prev_sal | new_sal  | time_in_company |
++-------------+-------------------+--------------+----------+----------+-----------------+
+|         100 | Steven King       | 2003-06-17   | 24000.00 | 26400.00 |              21 |
+|         101 | Neena Kochhar     | 2005-09-21   | 17000.00 | 18700.00 |              19 |
+|         102 | Lex De Haan       | 2001-01-13   | 17000.00 | 18700.00 |              23 |
+|         103 | Alexander Hunold  | 2006-01-03   |  9000.00 |  9900.00 |              18 |
+|         104 | Bruce Ernst       | 2007-05-21   |  6000.00 |  6600.00 |              17 |
+|         105 | David Austin      | 2005-06-25   |  4800.00 |  5280.00 |              19 |
+|         106 | Valli Pataballa   | 2006-02-05   |  4800.00 |  5280.00 |              18 |
+|         107 | Diana Lorentz     | 2007-02-07   |  4200.00 |  4620.00 |              17 |
+|         108 | Nancy Greenberg   | 2002-08-17   | 12008.00 | 13209.00 |              22 |
+|         109 | Daniel Faviet     | 2002-08-16   |  9000.00 |  9900.00 |              22 |
+|         110 | John Chen         | 2005-09-28   |  8200.00 |  9020.00 |              19 |
+|         111 | Ismael Sciarra    | 2005-09-30   |  7700.00 |  8470.00 |              19 |
+|         112 | Jose Manuel Urman | 2006-03-07   |  7800.00 |  8580.00 |              18 |
+|         113 | Luis Popp         | 2007-12-07   |  6900.00 |  7590.00 |              16 |
+|         114 | Den Raphaely      | 2002-12-07   | 11000.00 | 12100.00 |              21 |
+|         115 | Alexander Khoo    | 2003-05-18   |  3100.00 |  3410.00 |              21 |
+|         116 | Shelli Baida      | 2005-12-24   |  2900.00 |  3190.00 |              18 |
+|         117 | Sigal Tobias      | 2005-07-24   |  2800.00 |  3080.00 |              19 |
+|         118 | Guy Himuro        | 2006-11-15   |  2600.00 |  2860.00 |              17 |
+|         119 | Karen Colmenares  | 2007-08-10   |  2500.00 |  2750.00 |              17 |
+|         120 | Matthew Weiss     | 2004-07-18   |  8000.00 |  8800.00 |              20 |
++-------------+-------------------+--------------+----------+----------+-----------------+
+21 rows in set (0.00 sec)

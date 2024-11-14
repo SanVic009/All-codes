@@ -1,0 +1,13 @@
+                    ~~~~~~~~~~~~~~~~~~~~ Dairy Mangement System ~~~~~~~~~~~~~~~~~~~~
+
+You are give the following requirement for a dairy company:
+
+- In a distict, farmers have their own farmerID, farmer name, contactNO, address, no of cows , milk production capacity, account number, date of joining and no of years together. Each cow has its own cattleID, vaccinationStatus, age, offsprings, identityTag, medical history, milk capacity.
+
+- Each district has a milk collector who collects milk from the farmers and supply it to the branch. Each milk collerctor has a unique ID, name, mcAccountNo,date of joining, no of years together location at which he will collect milk and the amount of milk he receives from the farmers. He conducts quality checks(calory and fats) at the time of receiving milk. Depending upon the amount of milk, fat content and the calory content, the payment of the farmer is calculated. Depending upon the total amount of milk collected in a particular distric, the commission of the milk collector is decided.
+
+- The milk from many districts is received by the branch. Each branch has its own branchID and location. It keeps the record of how much milk is supplied by each district and records the lab reports of the milk received.The lab report has its own labReportID and consists of following tests: pathogens, temperature, fatcontents, proteins, lactose, DNF(water contents) and based on these test, we derive its milk type. Based on the lab reports, the milk is segregated.
+
+- Subsidy will be provided by the branch to the farmer to those who have been together for more than five years and more and it will consist of farmerID, subsidyID, subsidyStatus, type of subsidy provided and the amount of privileges granted.
+
+- Hence, now the certified milk is either transported to the factories for further processing into products or directly supplied to the distributor. Each factory will have its own factoryID, name, location and the amount of milk supplied. Each distributor has its distributorID, distributor name, factoryID, amount supplied.

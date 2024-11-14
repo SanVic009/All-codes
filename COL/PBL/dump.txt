@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: teal;
+    color: #000000;
+}
+
+.logo {
+    
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
+}
+header {
+    background-size: cover;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+
+
+h1 {
+    margin: 0;
+    font-size: 3em;
+    color: #0056b3;
+}
+
+nav {
+    background-color: rgba(62, 62, 62, 0.525);
+    padding: 10px 0;
+    width: fit-content;
+    align-items: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin-right: 90px;
+    position: relative;
+}
+
+nav ul li a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-flex;
+}
+
+nav ul li a:hover {
+    background-color: rgba(230, 128, 128, 0.3);
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #FFFFFF;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th{
+    border: 2px solid #000000;
+    color: #FFFFFF;
+    /* font-weight: ; */
+
+}
+
+table,
+td {
+    border: 2px solid #000000;
+    font-weight: 100px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #003366;
+    font-weight: bold;
+}
+
+ul {
+    padding: 0;
+    list-style-type: square;
+    margin-left: 20px;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #003d7a;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        /* Internal CSS */
+        h1 {
+            color: #d16523;
+        }
+    </style>
+</head>
+<body>
+    
+    <img src="_b75343df-a18c-47e0-ad6c-ec1ca58ca75e-removebg.png" width="400">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#Vision">Vision</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="about">
+            <h2>About Us</h2>
+            <p>This is a paragraph about our company. We offer a variety of services to help you with your needs.</p>
+            <img src="https://assets.new.siemens.com/siemens/assets/api/uuid:df06bbbf-fe71-4508-b0ca-e782ee6c0e5d/width:1024/quality:HIGH/df06bbbf-fe71-4508-b0ca-e782ee6c0e5d-high.webp" alt="About Us" style="width:100%; max-width:600px;">
+            <p>For more information, visit <a href="https://www.example.com" target="_blank">Example Website</a>.</p>
+        </section>
+        <section id="services">
+            <h2>Our Services</h2>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>Web Development</td>
+                    <td>Our web development services include creating responsive and interactive websites tailored to your needs.</td>
+                </tr>
+                <tr>
+                    <td>Digital Marketing</td>
+                    <td>Our digital marketing services help you reach your target audience through various online channels.</td>
+                </tr>
+            </table>
+            <ul>
+                <li>Graphic Design</li>
+                <li>Content Writing</li>
+                <li>App Development</li>
+            </ul>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <form action="/submit-form" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="4" required></textarea><br>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 My Informative Web Page. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+~~~~~~~~~~~~~~~ CRAETING TABLES ~~~~~~~~~~~~~~~
+create table Highschool(
+    id int primary key auto_increment,
+    name varchar(50) not null,
+    grade int not null
+);
+
+create table friends(
+    id1 int not null,
+    id2 int not null,
+    foreign key(id1) references Highschool(id),
+    foreign key(id2) references Highschool(id)
+);
+
+
+create table likes(
+    id1 int not null,
+    id2 int not null,
+    foreign key(id1) references Highschool(id),
+    foreign key(id2) references Highschool(id)
+);
+
++------------------+
+| Tables_in_assign |
++------------------+
+| employees        |
+| friends          |
+| highschool       |
+| likes            |
+| new_sal          |
++------------------+
+
+~~~~~~~~~~~~~~~ CREATING TRIGGERS ~~~~~~~~~~~~~~~
+
+delimiter #
+create trigger delete_symmetry
+    after delete on friends
+    for each row
+begin
+
+    insert into buffer(id1, id2) 
+    values (old.id2, old.id1);
+end#
+delimiter ;
+
+
+delimiter #
+create trigger insert_del
+    after insert on buffer
+    for each row
+begin
+    delete
+    from friends f
+    where f.id1 = new.id1;
+    
+    delete from buffer;
+end#
+delimiter ;
+

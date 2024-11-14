@@ -1,0 +1,9 @@
+bs ss is for arranging the data in sorted order
+arrange by roll number
+
+enter no of students
+ask rol, name , address, divsion, percentage
+
+read info, print it. 
+
+implement using struct

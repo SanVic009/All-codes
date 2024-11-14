@@ -1,0 +1,3 @@
+This is the test FILE WHICH WILL BE READ
+Welcome to File Handling!
+It is fun.

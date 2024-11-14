@@ -1,0 +1,50 @@
+1)
+select *
+from emp
+where deptno is not (
+    select deptno
+    from dept
+    where locationID <> 1700
+);
+
+2)
+select *
+from emp
+where sal = (
+    select max(sal)
+    from emp
+);
+
+3)
+select *
+from emp
+where sal > avg(sal);
+
+4)
+select deptno
+from emp
+where sal> 10000
+group by deptno;
+
+5)
+select deptno
+from emp
+where <= 10000
+group by deptno;
+
+6)
+select *
+from emp
+where sal = (
+    select min(sal)
+    from emp
+);
+
+7)
+select *
+from emp
+where sal > (
+    select min(sal)
+    from emp
+    group by deptno
+);

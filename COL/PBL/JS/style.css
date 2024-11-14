@@ -1,0 +1,117 @@
+/* Reset margins and paddings, set box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Container styles */
+.container {
+    padding: 50px;
+    width: 100%;
+    height: 100vh;
+    background-image: url('test.jpg'); /* Ensure correct path */
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Icon styles */
+i {
+    color: #007bff; /* Primary blue color for icons */
+    padding: 2px;
+    margin: auto 5px;
+}
+
+/* Title styles */
+.title {
+    text-align: center; /* Center the title */
+    margin-bottom: 20px; /* Space below the title */
+}
+
+/* Form box styles */
+.form-box {
+    padding: 30px;
+    background-color: #ffffff; /* Light gray background for the form box */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
+}
+
+/* Underline styles */
+.form-box .underline {
+    width: 130px;
+    height: 4px;
+    background: #007bff; /* Primary blue for underline */
+    border-radius: 5px;
+    margin: 10px auto 20px auto;
+    transition: transform .5s;
+}
+
+/* Input field styles */
+.input-field {
+    padding: 10px;
+    background: #f0f0f0; /* Light gray for input fields */
+    margin: 15px 0;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    width: 100%; /* Full width */
+}
+
+/* Input field styles */
+.input-field input {
+    width: calc(100% - 30px); /* Adjust width to fit with icon */
+    padding: 10px;
+    border: 1px solid #ccc; /* Light border for inputs */
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Button styles */
+.button {
+    padding: 12px; /* Added padding for better button appearance */
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    /* margin: 10px 0; */
+    margin-right: 50px;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+/* Sign Up Button */
+.signUpButton {
+    background: linear-gradient(45deg, #ff6f61, #e53935); /* Warm coral to red gradient */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Sign In Button */
+.signInButton {
+    background: linear-gradient(45deg, #4caf50, #388e3c); /* Green gradient */
+    margin-left: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    align-items: end;
+}
+
+/* Button hover effects */
+.signUpButton:hover {
+    background: linear-gradient(45deg, #e53935, #c62828); /* Darker coral to red gradient */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.signInButton:hover {
+    background: linear-gradient(45deg, #388e3c, #2c6b2f); /* Darker green gradient */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}

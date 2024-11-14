@@ -1,0 +1,1462 @@
+~~~~~~~~~~~~~~~ Creating Database ~~~~~~~~~~~~~~~
+
+create database emp;
+
+~~~~~~~~~~~~~~~ Creating Tables ~~~~~~~~~~~~~~~
+
+create table employees(
+    EMPLOYEE_ID int primary key,
+    FIRST_NAME varchar(20),
+    LAST_NAME varchar(20) not null,
+    EMAIL varchar(30) not null unique,
+    PHONE_NUMBER varchar(30) not null unique,
+    HIRE_DATE date not null,
+    JOB_ID varchar(10) not null,
+    SALARY decimal(8,2) not null,
+    COMMISSION_PCT decimal(2,2) default 0.00,
+    MANAGER_ID int,
+    DEPARTMENT_ID int
+);
+
+desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | int          | NO   | PRI | NULL    |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(20)  | NO   |     | NULL    |       |
+| EMAIL          | varchar(30)  | NO   |     | NULL    |       |
+| PHONE_NUMBER   | varchar(30)  | NO   |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   |     | NULL    |       |
+| SALARY         | decimal(8,2) | NO   |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | 0.00    |       |
+| MANAGER_ID     | int          | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | int          | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.02 sec)
+
+create table departments(
+    DEPARTMENT_ID int primary key,
+    DEPARTMENT_NAME varchar(20) not null,
+    MANAGER_ID int,
+    LOCATION_ID int,
+    foreign key(MANAGER_ID) references employees(EMPLOYEE_ID)
+);
+
+desc departments;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | int         | NO   | PRI | NULL    |       |
+| DEPARTMENT_NAME | varchar(20) | NO   |     | NULL    |       |
+| MANAGER_ID      | int         | YES  | MUL | NULL    |       |
+| LOCATION_ID     | int         | YES  |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+create table locations (
+    LOCATION_ID int primary key,
+    STREET_ADDRESS varchar(30),
+    POSTAL_CODE varchar(20) not null,
+    CITY varchar(30) not null,
+    STATE_PROVINCE varchar(30) not null,
+    COUNTRY_ID char(2) not null
+);
+
+desc locations;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| LOCATION_ID    | int         | NO   | PRI | NULL    |       |
+| STREET_ADDRESS | varchar(30) | YES  |     | NULL    |       |
+| POSTAL_CODE    | varchar(20) | NO   |     | NULL    |       |
+| CITY           | varchar(30) | NO   |     | NULL    |       |
+| STATE_PROVINCE | varchar(30) | NO   |     | NULL    |       |
+| COUNTRY_ID     | char(2)     | NO   |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+create table countries(
+    COUNTRY_ID char(2) primary key,
+    COUNTRY_NAME varchar(40) not null,
+    REGION_ID int not null
+);
+
+desc countries;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| COUNTRY_ID   | char(2)     | NO   | PRI | NULL    |       |
+| COUNTRY_NAME | varchar(40) | NO   |     | NULL    |       |
+| REGION_ID    | int         | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+create table jobs(
+    JOB_ID varchar(10) primary key,
+    JOB_TITLE varchar(40) not null,
+    MAX_SALARY int,
+    MIN_SALARY int
+);
+
+desc jobs;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| JOB_ID     | varchar(10) | NO   | PRI | NULL    |       |
+| JOB_TITLE  | varchar(40) | NO   |     | NULL    |       |
+| MAX_SALARY | int         | YES  |     | NULL    |       |
+| MIN_SALARY | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+create table job_history(
+    EMPLOYEE_ID int,
+    START_DATE date not null,
+    END_DATE date not null,
+    JOB_ID varchar(20) not null,
+    DEPARTMENT_ID int not null,
+    foreign key (EMPLOYEE_ID) references employees(EMPLOYEE_ID),
+    foreign key (JOB_ID) references jobs(JOB_ID),
+    foreign key (DEPARTMENT_ID) references departments(DEPARTMENT_ID)
+);
+
+desc job_history;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| EMPLOYEE_ID   | int         | YES  | MUL | NULL    |       |
+| START_DATE    | date        | NO   |     | NULL    |       |
+| END_DATE      | date        | NO   |     | NULL    |       |
+| JOB_ID        | varchar(20) | NO   | MUL | NULL    |       |
+| DEPARTMENT_ID | int         | NO   | MUL | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+~~~~~~~~~~~~~~~ Inserting Values ~~~~~~~~~~~~~~~
+
+INSERT INTO employees (
+    EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID
+) VALUES
+    (100, 'Steven', 'King', 'SKING', '515.123.4567', '2003-06-17', 'AD_PRES', 24000.00, 0.00, 0, 90),
+    (101, 'Neena', 'Kochhar', 'NKOCHHAR', '515.123.4568', '2005-09-21', 'AD_VP', 17000.00, 0.00, 100, 90),
+    (102, 'Lex', 'De Haan', 'LDEHAAN', '515.123.4569', '2001-01-13', 'AD_VP', 17000.00, 0.00, 100, 90),
+    (103, 'Alexander', 'Hunold', 'AHUNOLD', '590.423.4567', '2006-01-03', 'IT_PROG', 9000.00, 0.00, 102, 60),
+    (104, 'Bruce', 'Ernst', 'BERNST', '590.423.4568', '2007-05-21', 'IT_PROG', 6000.00, 0.00, 103, 60),
+    (105, 'David', 'Austin', 'DAUSTIN', '590.423.4569', '2005-06-25', 'IT_PROG', 4800.00, 0.00, 103, 60),
+    (106, 'Valli', 'Pataballa', 'VPATABAL', '590.423.4560', '2006-02-05', 'IT_PROG', 4800.00, 0.00, 103, 60),
+    (107, 'Diana', 'Lorentz', 'DLORENTZ', '590.423.5567', '2007-02-07', 'IT_PROG', 4200.00, 0.00, 103, 60),
+    (108, 'Nancy', 'Greenberg', 'NGREENBE', '515.124.4569', '2002-08-17', 'FI_MGR', 12008.00, 0.00, 101, 100),
+    (109, 'Daniel', 'Faviet', 'DFAVIET', '515.124.4169', '2002-08-16', 'FI_ACCOUNT', 9000.00, 0.00, 108, 100),
+    (110, 'John', 'Chen', 'JCHEN', '515.124.4269', '2005-09-28', 'FI_ACCOUNT', 8200.00, 0.00, 108, 100),
+    (111, 'Ismael', 'Sciarra', 'ISCIARRA', '515.124.4369', '2005-09-30', 'FI_ACCOUNT', 7700.00, 0.00, 108, 100),
+    (112, 'Jose Manuel', 'Urman', 'JMURMAN', '515.124.4469', '2006-03-07', 'FI_ACCOUNT', 7800.00, 0.00, 108, 100),
+    (113, 'Luis', 'Popp', 'LPOPP', '515.124.4567', '2007-12-07', 'FI_ACCOUNT', 6900.00, 0.00, 108, 100),
+    (114, 'Den', 'Raphaely', 'DRAPHEAL', '515.127.4561', '2002-12-07', 'PU_MAN', 11000.00, 0.00, 100, 30),
+    (115, 'Alexander', 'Khoo', 'AKHOO', '515.127.4562', '2003-05-18', 'PU_CLERK', 3100.00, 0.00, 114, 30),
+    (116, 'Shelli', 'Baida', 'SBAIDA', '515.127.4563', '2005-12-24', 'PU_CLERK', 2900.00, 0.00, 114, 30),
+    (117, 'Sigal', 'Tobias', 'STOBIAS', '515.127.4564', '2005-07-24', 'PU_CLERK', 2800.00, 0.00, 114, 30),
+    (118, 'Guy', 'Himuro', 'GHIMURO', '515.127.4565', '2006-11-15', 'PU_CLERK', 2600.00, 0.00, 114, 30),
+    (119, 'Karen', 'Colmenares', 'KCOLMENA', '515.127.4566', '2007-08-10', 'PU_CLERK', 2500.00, 0.00, 114, 30),
+    (120, 'Matthew', 'Weiss', 'MWEISS', '650.123.1234', '2004-07-18', 'ST_MAN', 8000.00, 0.00, 100, 50),
+    (121, 'Adam', 'Fripp', 'AFRIPP', '650.123.2234', '2005-04-10', 'ST_MAN', 8200.00, 0.00, 100, 50),
+    (122, 'Payam', 'Kaufling', 'PKAUFLIN', '650.123.3234', '2003-05-01', 'ST_MAN', 7900.00, 0.00, 100, 50),
+    (123, 'Shanta', 'Vollman', 'SVOLLMAN', '650.123.4234', '2005-10-10', 'ST_MAN', 6500.00, 0.00, 100, 50),
+    (124, 'Kevin', 'Mourgos', 'KMOURGOS', '650.123.5234', '2007-11-16', 'ST_MAN', 5800.00, 0.00, 100, 50),
+    (125, 'Julia', 'Nayer', 'JNAYER', '650.124.1214', '2005-07-16', 'ST_CLERK', 3200.00, 0.00, 120, 50),
+    (126, 'Irene', 'Mikkilineni', 'IMIKKILI', '650.124.1224', '2006-09-28', 'ST_CLERK', 2700.00, 0.00, 120, 50),
+    (127, 'James', 'Landry', 'JLANDRY', '650.124.1334', '2007-01-14', 'ST_CLERK', 2400.00, 0.00, 120, 50),
+    (128, 'Steven', 'Markle', 'SMARKLE', '650.124.1434', '2008-03-08', 'ST_CLERK', 2200.00, 0.00, 120, 50),
+    (129, 'Laura', 'Bissot', 'LBISSOT', '650.124.5234', '2005-08-20', 'ST_CLERK', 3300.00, 0.00, 121, 50),
+    (130, 'Mozhe', 'Atkinson', 'MATKINSO', '650.124.6234', '2005-10-30', 'ST_CLERK', 2800.00, 0.00, 121, 50),
+    (131, 'James', 'Marlow', 'JAMRLOW', '650.124.7234', '2005-02-16', 'ST_CLERK', 2500.00, 0.00, 121, 50),
+    (132, 'TJ', 'Olson', 'TJOLSON', '650.124.8234', '2007-04-10', 'ST_CLERK', 2100.00, 0.00, 121, 50),
+    (133, 'Jason', 'Mallin', 'JMALLIN', '650.127.1934', '2004-06-14', 'ST_CLERK', 3300.00, 0.00, 122, 50),
+    (134, 'Michael', 'Rogers', 'MROGERS', '650.127.1834', '2006-08-26', 'ST_CLERK', 2900.00, 0.00, 122, 50),
+    (135, 'Ki', 'Gee', 'KGEE', '650.127.1734', '2007-12-12', 'ST_CLERK', 2400.00, 0.00, 122, 50),
+    (136, 'Hazel', 'Philtanker', 'HPHILTAN', '650.127.1634', '2008-02-06', 'ST_CLERK', 2200.00, 0.00, 122, 50),
+    (137, 'Renske', 'Ladwig', 'RLADWIG', '650.121.1234', '2003-07-14', 'ST_CLERK', 3600.00, 0.00, 123, 50),
+    (138, 'Stephen', 'Stiles', 'SSTILES', '650.121.2034', '2005-10-26', 'ST_CLERK', 3200.00, 0.00, 123, 50),
+    (139, 'John', 'Seo', 'JSEO', '650.121.2019', '2006-02-12', 'ST_CLERK', 2700.00, 0.00, 123, 50),
+    (140, 'Joshua', 'Patel', 'JPATEL', '650.121.1834', '2006-04-06', 'ST_CLERK', 2500.00, 0.00, 123, 50),
+    (141, 'Trenna', 'Rajs', 'TRAJS', '650.121.8009', '2003-10-17', 'ST_CLERK', 3500.00, 0.00, 124, 50),
+    (142, 'Curtis', 'Davies', 'CDAVIES', '650.121.2994', '2005-01-29', 'ST_CLERK', 3100.00, 0.00, 124, 50),
+    (143, 'Randall', 'Matos', 'RMATOS', '650.121.2874', '2006-03-15', 'ST_CLERK', 2600.00, 0.00, 124, 50),
+    (144, 'Peter', 'Vargas', 'PVARGAS', '650.121.2854', '2006-07-09', 'ST_CLERK', 2500.00, 0.00, 124, 50),
+    (145, 'John', 'Russell', 'JRUSSEL', '011.44.1344.429268', '2004-10-01', 'SA_MAN', 14000.00, 0.40, 100, 80),
+    (146, 'Karen', 'Partners', 'KPARTNER', '011.44.1344.467268', '2005-01-05', 'SA_MAN', 13500.00, 0.30, 100, 80),
+    (147, 'Alberto', 'Errazuriz', 'AERRAZUR', '011.44.1344.429278', '2005-03-10', 'SA_MAN', 12000.00, 0.30, 100, 80),
+    (148, 'Gerald', 'Cambrault', 'GCAMBRAU', '011.44.1344.619268', '2007-10-15', 'SA_MAN', 11000.00, 0.30, 100, 80),
+    (149, 'Eleni', 'Zlotkey', 'EZLOTKEY', '011.44.1343.929268', '2008-01-29', 'SA_MAN', 10500.00, 0.20, 100, 80),
+    (150, 'Peter', 'Tucker', 'PTUCKER', '011.44.1343.829268', '2004-01-30', 'SA_REP', 10000.00, 0.30, 145, 80),
+    (151, 'David', 'Bernstein', 'DBERNSTE', '011.44.1343.329268', '2005-03-24', 'SA_REP', 9500.00, 0.25, 145, 80),
+    (152, 'Peter', 'Hall', 'PHALL', '011.44.1343.629268', '2005-08-20', 'SA_REP', 9000.00, 0.25, 145, 80),
+    (153, 'Christopher', 'Olsen', 'COLSEN', '011.44.1343.829268', '2006-03-30', 'SA_REP', 8000.00, 0.20, 145, 80),
+    (154, 'Nanette', 'Cambrault', 'NCAMBRAU', '011.44.1343.929268', '2006-12-09', 'SA_REP', 7500.00, 0.20, 145, 80),
+    (155, 'Oliver', 'Tuvault', 'OTUVAULT', '011.44.1343.629268', '2007-11-23', 'SA_REP', 7000.00, 0.15, 145, 80),
+    (156, 'Janette', 'King', 'JKING', '011.44.1343.529268', '2004-01-30', 'SA_REP', 10000.00, 0.35, 146, 80),
+    (157, 'Patrick', 'Sully', 'PSULLY', '011.44.1343.729268', '2004-03-04', 'SA_REP', 9500.00, 0.35, 146, 80),
+    (158, 'Allan', 'McEwen', 'AMCEWEN', '011.44.1343.829268', '2004-08-01', 'SA_REP', 9000.00, 0.35, 146, 80),
+    (159, 'Lindsey', 'Smith', 'LSMITH', '011.44.1343.929268', '2005-03-10', 'SA_REP', 8000.00, 0.30, 146, 80),
+    (160, 'Louise', 'Doran', 'LDORAN', '011.44.1343.629268', '2005-12-15', 'SA_REP', 7500.00, 0.30, 146, 80),
+    (161, 'Sarath', 'Sewall', 'SSEWALL', '011.44.1343.529268', '2006-11-03', 'SA_REP', 7000.00, 0.25, 146, 80),
+    (162, 'Clara', 'Vishney', 'CVISHNEY', '011.44.1346.129268', '2006-11-11', 'SA_REP', 10500.00, 0.25, 147, 80),
+    (163, 'Danielle', 'Greene', 'DGREENE', '011.44.1346.229268', '2007-03-19', 'SA_REP', 9500.00, 0.15, 147, 80),
+    (164, 'Mattea', 'Marvins', 'MMARVINS', '011.44.1346.329268', '2007-07-07', 'SA_REP', 7200.00, 0.10, 147, 80),
+    (165, 'David', 'Lee', 'DLEE', '011.44.1346.529268', '2008-02-23', 'SA_REP', 6800.00, 0.10, 147, 80),
+    (166, 'Sundar', 'Ande', 'SANDE', '011.44.1345.129268', '2008-03-24', 'SA_REP', 6400.00, 0.10, 147, 80),
+    (167, 'Amit', 'Banda', 'ABANDA', '011.44.1345.229268', '2008-04-21', 'SA_REP', 6200.00, 0.10, 147, 80),
+    (168, 'Lisa', 'Ozer', 'LOZER', '011.44.1345.329268', '2005-03-11', 'SA_REP', 11500.00, 0.25, 148, 80),
+    (169, 'Harrison', 'Bloom', 'HBLOOM', '011.44.1345.629268', '2006-03-23', 'SA_REP', 10000.00, 0.20, 148, 80),
+    (170, 'Tayler', 'Fox', 'TFOX', '011.44.1345.729268', '2006-01-24', 'SA_REP', 9600.00, 0.20, 148, 80),
+    (171, 'William', 'Smith', 'WSMITH', '011.44.1345.829268', '2007-02-16', 'SA_REP', 7400.00, 0.15, 148, 80),
+    (172, 'Elizabeth', 'Bates', 'EBATES', '011.44.1345.829268', '2007-03-24', 'SA_REP', 7300.00, 0.15, 148, 80),
+    (173, 'Sundita', 'Kumar', 'SKUMAR', '011.44.1345.929268', '2008-04-21', 'SA_REP', 6100.00, 0.10, 148, 80),
+    (174, 'Ellen', 'Abel', 'EABEL', '011.44.1644.429263', '2004-05-11', 'SA_REP', 11000.00, 0.30, 149, 80),
+    (175, 'Alyssa', 'Hutton', 'AHUTTON', '011.44.1644.429262', '2005-03-19', 'SA_REP', 8800.00, 0.25, 149, 80),
+    (176, 'Jonathon', 'Taylor', 'JTAYLOR', '011.44.1644.429261', '2006-03-24', 'SA_REP', 8600.00, 0.20, 149, 80),
+    (177, 'Jack', 'Livingston', 'JLIVINGS', '011.44.1644.429260', '2006-04-23', 'SA_REP', 8400.00, 0.20, 149, 80),
+    (178, 'Kimberely', 'Grant', 'KGRANT', '011.44.1644.429259', '2007-05-24', 'SA_REP', 7000.00, 0.15, 149, 80),
+    (179, 'Charles', 'Johnson', 'CJOHNSON', '011.44.1644.429258', '2008-01-04', 'SA_REP', 6200.00, 0.10, 149, 80),
+    (180, 'Winston', 'Taylor', 'WTAYLOR', '650.507.9876', '2006-01-24', 'SH_CLERK', 3200.00, NULL, 120, 50),
+    (181, 'Jean', 'Fleaur', 'JFLEAUR', '650.507.9827', '2006-02-23', 'SH_CLERK', 3100.00, NULL, 120, 50),
+    (182, 'Martha', 'Sullivan', 'MSULLIVA', '650.507.9825', '2007-06-21', 'SH_CLERK', 2500.00, NULL, 120, 50),
+    (183, 'Girard', 'Geoni', 'GGEONI', '650.507.9814', '2008-02-03', 'SH_CLERK', 2800.00, NULL, 120, 50),
+    (184, 'Nandita', 'Sarchand', 'NSARCHAN', '650.509.1876', '2004-01-27', 'SH_CLERK', 4200.00, NULL, 121, 50),
+    (185, 'Alexis', 'Bull', 'ABULL', '650.509.8076', '2005-02-20', 'SH_CLERK', 4100.00, NULL, 121, 50),
+    (186, 'Julia', 'Dellinger', 'JDELLING', '650.509.8077', '2006-06-24', 'SH_CLERK', 3400.00, NULL, 121, 50),
+    (187, 'Anthony', 'Cabrio', 'ACABRIO', '650.509.8078', '2007-02-07', 'SH_CLERK', 3000.00, NULL, 121, 50),
+    (188, 'Kelly', 'Chung', 'KCHUNG', '650.505.1876', '2005-06-14', 'SH_CLERK', 3800.00, NULL, 122, 50),
+    (189, 'Jennifer', 'Dilly', 'JDILLY', '650.505.2876', '2005-08-13', 'SH_CLERK', 3600.00, NULL, 122, 50),
+    (190, 'Timothy', 'Gates', 'TGATES', '650.505.3876', '2006-07-11', 'SH_CLERK', 2900.00, NULL, 122, 50),
+    (191, 'Randall', 'Perkins', 'RPERKINS', '650.505.4876', '2007-12-19', 'SH_CLERK', 2500.00, NULL, 122, 50),
+    (192, 'Sarah', 'Bell', 'SBELL', '650.501.1876', '2004-02-04', 'SH_CLERK', 4000.00, NULL, 123, 50),
+    (193, 'Britney', 'Everett', 'BEVERETT', '650.501.2876', '2005-03-03', 'SH_CLERK', 3900.00, NULL, 123, 50),
+    (194, 'Samuel', 'McCain', 'SMCCAIN', '650.501.3876', '2006-07-01', 'SH_CLERK', 3200.00, NULL, 123, 50),
+    (195, 'Vance', 'Jones', 'VJONES', '650.501.4876', '2007-03-17', 'SH_CLERK', 2800.00, NULL, 123, 50),
+    (196, 'Alana', 'Walsh', 'AWALSH', '650.507.9811', '2006-04-24', 'SH_CLERK', 3100.00, NULL, 124, 50),
+    (197, 'Kevin', 'Feeney', 'KFEENEY', '650.507.9821', '2006-05-23', 'SH_CLERK', 3000.00, NULL, 124, 50),
+    (198, 'Donald', 'OConnell', 'DOCONNEL', '650.507.9822', '2007-06-21', 'SH_CLERK', 2600.00, NULL, 124, 50),
+    (199, 'Douglas', 'Grant', 'DGRANT', '650.507.9833', '2008-01-13', 'SH_CLERK', 2600.00, NULL, 124, 50),
+    (200, 'Jennifer', 'Whalen', 'JWHALEN', '515.123.4444', '2003-09-17', 'AD_ASST', 4400.00, NULL, 101, 10),
+    (201, 'Michael', 'Hartstein', 'MHARTSTE', '515.123.5555', '2004-02-17', 'MK_MAN', 13000.00, NULL, 100, 20),
+    (202, 'Pat', 'Fay', 'PFAY', '603.123.6666', '2005-08-17', 'MK_REP', 6000.00, NULL, 201, 20),
+    (203, 'Susan', 'Mavris', 'SMAVRIS', '515.123.7777', '2002-06-07', 'HR_REP', 6500.00, NULL, 101, 40),
+    (204, 'Hermann', 'Baer', 'HBAER', '515.123.8888', '2002-06-07', 'PR_REP', 10000.00, NULL, 101, 70),
+    (205, 'Shelley', 'Higgins', 'SHIGGINS', '515.123.8080', '2002-06-07', 'AC_MGR', 12000.00, NULL, 101, 110),
+    (206, 'William', 'Gietz', 'WGIETZ', '515.123.8181', '2002-06-07', 'AC_ACCOUNT', 8300.00, NULL, 205, 110);
+
+ROWS:
+    +-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+    | EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER       | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
+    +-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+    |         100 | Steven      | King        | SKING    | 515.123.4567       | 2003-06-17 | AD_PRES    | 24000.00 |           0.00 |          0 |            90 |
+    |         101 | Neena       | Kochhar     | NKOCHHAR | 515.123.4568       | 2005-09-21 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+    |         102 | Lex         | De Haan     | LDEHAAN  | 515.123.4569       | 2001-01-13 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+    |         103 | Alexander   | Hunold      | AHUNOLD  | 590.423.4567       | 2006-01-03 | IT_PROG    |  9000.00 |           0.00 |        102 |            60 |
+    |         104 | Bruce       | Ernst       | BERNST   | 590.423.4568       | 2007-05-21 | IT_PROG    |  6000.00 |           0.00 |        103 |            60 |
+    |         105 | David       | Austin      | DAUSTIN  | 590.423.4569       | 2005-06-25 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+    |         106 | Valli       | Pataballa   | VPATABAL | 590.423.4560       | 2006-02-05 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+    |         107 | Diana       | Lorentz     | DLORENTZ | 590.423.5567       | 2007-02-07 | IT_PROG    |  4200.00 |           0.00 |        103 |            60 |
+    |         108 | Nancy       | Greenberg   | NGREENBE | 515.124.4569       | 2002-08-17 | FI_MGR     | 12008.00 |           0.00 |        101 |           100 |
+    |         109 | Daniel      | Faviet      | DFAVIET  | 515.124.4169       | 2002-08-16 | FI_ACCOUNT |  9000.00 |           0.00 |        108 |           100 |
+    |         110 | John        | Chen        | JCHEN    | 515.124.4269       | 2005-09-28 | FI_ACCOUNT |  8200.00 |           0.00 |        108 |           100 |
+    |         111 | Ismael      | Sciarra     | ISCIARRA | 515.124.4369       | 2005-09-30 | FI_ACCOUNT |  7700.00 |           0.00 |
+        108 |           100 |
+    |         112 | Jose Manuel | Urman       | JMURMAN  | 515.124.4469       | 2006-03-07 | FI_ACCOUNT |  7800.00 |           0.00 |        108 |           100 |
+    |         113 | Luis        | Popp        | LPOPP    | 515.124.4567       | 2007-12-07 | FI_ACCOUNT |  6900.00 |           0.00 |        108 |           100 |
+    |         114 | Den         | Raphaely    | DRAPHEAL | 515.127.4561       | 2002-12-07 | PU_MAN     | 11000.00 |           0.00 |        100 |            30 |
+    |         115 | Alexander   | Khoo        | AKHOO    | 515.127.4562       | 2003-05-18 | PU_CLERK   |  3100.00 |           0.00 |        114 |            30 |
+    |         116 | Shelli      | Baida       | SBAIDA   | 515.127.4563       | 2005-12-24 | PU_CLERK   |  2900.00 |           0.00 |        114 |            30 |
+    |         117 | Sigal       | Tobias      | STOBIAS  | 515.127.4564       | 2005-07-24 | PU_CLERK   |  2800.00 |           0.00 |        114 |            30 |
+    |         118 | Guy         | Himuro      | GHIMURO  | 515.127.4565       | 2006-11-15 | PU_CLERK   |  2600.00 |           0.00 |        114 |            30 |
+    |         119 | Karen       | Colmenares  | KCOLMENA | 515.127.4566       | 2007-08-10 | PU_CLERK   |  2500.00 |           0.00 |        114 |            30 |
+    |         120 | Matthew     | Weiss       | MWEISS   | 650.123.1234       | 2004-07-18 | ST_MAN     |  8000.00 |           0.00 |        100 |            50 |
+    |         121 | Adam        | Fripp       | AFRIPP   | 650.123.2234       | 2005-04-10 | ST_MAN     |  8200.00 |           0.00 |        100 |            50 |
+    |         122 | Payam       | Kaufling    | PKAUFLIN | 650.123.3234       | 2003-05-01 | ST_MAN     |  7900.00 |           0.00 |        100 |            50 |
+    |         123 | Shanta      | Vollman     | SVOLLMAN | 650.123.4234       | 2005-10-10 | ST_MAN     |  6500.00 |           0.00 |        100 |            50 |
+    |         124 | Kevin       | Mourgos     | KMOURGOS | 650.123.5234       | 2007-11-16 | ST_MAN     |  5800.00 |           0.00 |        100 |            50 |
+    |         125 | Julia       | Nayer       | JNAYER   | 650.124.1214       | 2005-07-16 | ST_CLERK   |  3200.00 |           0.00 |        120 |            50 |
+    |         126 | Irene       | Mikkilineni | IMIKKILI | 650.124.1224       | 2006-09-28 | ST_CLERK   |  2700.00 |           0.00 |        120 |            50 |
+    |         127 | James       | Landry      | JLANDRY  | 650.124.1334       | 2007-01-14 | ST_CLERK   |  2400.00 |           0.00 |        120 |            50 |
+    |         128 | Steven      | Markle      | SMARKLE  | 650.124.1434       | 2008-03-08 | ST_CLERK   |  2200.00 |           0.00 |        120 |            50 |
+    |         129 | Laura       | Bissot      | LBISSOT  | 650.124.5234       | 2005-08-20 | ST_CLERK   |  3300.00 |           0.00 |        121 |            50 |
+    |         130 | Mozhe       | Atkinson    | MATKINSO | 650.124.6234       | 2005-10-30 | ST_CLERK   |  2800.00 |           0.00 |        121 |            50 |
+    |         131 | James       | Marlow      | JAMRLOW  | 650.124.7234       | 2005-02-16 | ST_CLERK   |  2500.00 |           0.00 |        121 |            50 |
+    |         132 | TJ          | Olson       | TJOLSON  | 650.124.8234       | 2007-04-10 | ST_CLERK   |  2100.00 |           0.00 |
+        121 |            50 |
+    |         133 | Jason       | Mallin      | JMALLIN  | 650.127.1934       | 2004-06-14 | ST_CLERK   |  3300.00 |           0.00 |        122 |            50 |
+    |         134 | Michael     | Rogers      | MROGERS  | 650.127.1834       | 2006-08-26 | ST_CLERK   |  2900.00 |           0.00 |        122 |            50 |
+    |         135 | Ki          | Gee         | KGEE     | 650.127.1734       | 2007-12-12 | ST_CLERK   |  2400.00 |           0.00 |        122 |            50 |
+    |         136 | Hazel       | Philtanker  | HPHILTAN | 650.127.1634       | 2008-02-06 | ST_CLERK   |  2200.00 |           0.00 |        122 |            50 |
+    |         137 | Renske      | Ladwig      | RLADWIG  | 650.121.1234       | 2003-07-14 | ST_CLERK   |  3600.00 |           0.00 |        123 |            50 |
+    |         138 | Stephen     | Stiles      | SSTILES  | 650.121.2034       | 2005-10-26 | ST_CLERK   |  3200.00 |           0.00 |        123 |            50 |
+    |         139 | John        | Seo         | JSEO     | 650.121.2019       | 2006-02-12 | ST_CLERK   |  2700.00 |           0.00 |        123 |            50 |
+    |         140 | Joshua      | Patel       | JPATEL   | 650.121.1834       | 2006-04-06 | ST_CLERK   |  2500.00 |           0.00 |        123 |            50 |
+    |         141 | Trenna      | Rajs        | TRAJS    | 650.121.8009       | 2003-10-17 | ST_CLERK   |  3500.00 |           0.00 |        124 |            50 |
+    |         142 | Curtis      | Davies      | CDAVIES  | 650.121.2994       | 2005-01-29 | ST_CLERK   |  3100.00 |           0.00 |        124 |            50 |
+    |         143 | Randall     | Matos       | RMATOS   | 650.121.2874       | 2006-03-15 | ST_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+    |         144 | Peter       | Vargas      | PVARGAS  | 650.121.2854       | 2006-07-09 | ST_CLERK   |  2500.00 |           0.00 |        124 |            50 |
+    |         145 | John        | Russell     | JRUSSEL  | 011.44.1344.429268 | 2004-10-01 | SA_MAN     | 14000.00 |           0.40 |        100 |            80 |
+    |         146 | Karen       | Partners    | KPARTNER | 011.44.1344.467268 | 2005-01-05 | SA_MAN     | 13500.00 |           0.30 |        100 |            80 |
+    |         147 | Alberto     | Errazuriz   | AERRAZUR | 011.44.1344.429278 | 2005-03-10 | SA_MAN     | 12000.00 |           0.30 |        100 |            80 |
+    |         148 | Gerald      | Cambrault   | GCAMBRAU | 011.44.1344.619268 | 2007-10-15 | SA_MAN     | 11000.00 |           0.30 |        100 |            80 |
+    |         149 | Eleni       | Zlotkey     | EZLOTKEY | 011.44.1343.929268 | 2008-01-29 | SA_MAN     | 10500.00 |           0.20 |        100 |            80 |
+    |         150 | Peter       | Tucker      | PTUCKER  | 011.44.1343.829268 | 2004-01-30 | SA_REP     | 10000.00 |           0.30 |        145 |            80 |
+    |         151 | David       | Bernstein   | DBERNSTE | 011.44.1343.329268 | 2005-03-24 | SA_REP     |  9500.00 |           0.25 |        145 |            80 |
+    |         152 | Peter       | Hall        | PHALL    | 011.44.1343.629268 | 2005-08-20 | SA_REP     |  9000.00 |           0.25 |        145 |            80 |
+    |         153 | Christopher | Olsen       | COLSEN   | 011.44.1343.829268 | 2006-03-30 | SA_REP     |  8000.00 |           0.20 |        145 |            80 |
+    |         154 | Nanette     | Cambrault   | NCAMBRAU | 011.44.1343.929268 | 2006-12-09 | SA_REP     |  7500.00 |           0.20 |        145 |            80 |
+    |         155 | Oliver      | Tuvault     | OTUVAULT | 011.44.1343.629268 | 2007-11-23 | SA_REP     |  7000.00 |           0.15 |        145 |            80 |
+    |         156 | Janette     | King        | JKING    | 011.44.1343.529268 | 2004-01-30 | SA_REP     | 10000.00 |           0.35 |        146 |            80 |
+    |         157 | Patrick     | Sully       | PSULLY   | 011.44.1343.729268 | 2004-03-04 | SA_REP     |  9500.00 |           0.35 |        146 |            80 |
+    |         158 | Allan       | McEwen      | AMCEWEN  | 011.44.1343.829268 | 2004-08-01 | SA_REP     |  9000.00 |           0.35 |        146 |            80 |
+    |         159 | Lindsey     | Smith       | LSMITH   | 011.44.1343.929268 | 2005-03-10 | SA_REP     |  8000.00 |           0.30 |        146 |            80 |
+    |         160 | Louise      | Doran       | LDORAN   | 011.44.1343.629268 | 2005-12-15 | SA_REP     |  7500.00 |           0.30 |        146 |            80 |
+    |         161 | Sarath      | Sewall      | SSEWALL  | 011.44.1343.529268 | 2006-11-03 | SA_REP     |  7000.00 |           0.25 |        146 |            80 |
+    |         162 | Clara       | Vishney     | CVISHNEY | 011.44.1346.129268 | 2006-11-11 | SA_REP     | 10500.00 |           0.25 |        147 |            80 |
+    |         163 | Danielle    | Greene      | DGREENE  | 011.44.1346.229268 | 2007-03-19 | SA_REP     |  9500.00 |           0.15 |        147 |            80 |
+    |         164 | Mattea      | Marvins     | MMARVINS | 011.44.1346.329268 | 2007-07-07 | SA_REP     |  7200.00 |           0.10 |        147 |            80 |
+    |         165 | David       | Lee         | DLEE     | 011.44.1346.529268 | 2008-02-23 | SA_REP     |  6800.00 |           0.10 |        147 |            80 |
+    |         166 | Sundar      | Ande        | SANDE    | 011.44.1345.129268 | 2008-03-24 | SA_REP     |  6400.00 |           0.10 |        147 |            80 |
+    |         167 | Amit        | Banda       | ABANDA   | 011.44.1345.229268 | 2008-04-21 | SA_REP     |  6200.00 |           0.10 |        147 |            80 |
+    |         168 | Lisa        | Ozer        | LOZER    | 011.44.1345.329268 | 2005-03-11 | SA_REP     | 11500.00 |           0.25 |        148 |            80 |
+    |         169 | Harrison    | Bloom       | HBLOOM   | 011.44.1345.629268 | 2006-03-23 | SA_REP     | 10000.00 |           0.20 |        148 |            80 |
+    |         170 | Tayler      | Fox         | TFOX     | 011.44.1345.729268 | 2006-01-24 | SA_REP     |  9600.00 |           0.20 |        148 |            80 |
+    |         171 | William     | Smith       | WSMITH   | 011.44.1345.829268 | 2007-02-16 | SA_REP     |  7400.00 |           0.15 |        148 |            80 |
+    |         172 | Elizabeth   | Bates       | EBATES   | 011.44.1345.829268 | 2007-03-24 | SA_REP     |  7300.00 |           0.15 |        148 |            80 |
+    |         173 | Sundita     | Kumar       | SKUMAR   | 011.44.1345.929268 | 2008-04-21 | SA_REP     |  6100.00 |           0.10 |        148 |            80 |
+    |         174 | Ellen       | Abel        | EABEL    | 011.44.1644.429263 | 2004-05-11 | SA_REP     | 11000.00 |           0.30 |        149 |            80 |
+    |         175 | Alyssa      | Hutton      | AHUTTON  | 011.44.1644.429262 | 2005-03-19 | SA_REP     |  8800.00 |           0.25 |        149 |            80 |
+    |         176 | Jonathon    | Taylor      | JTAYLOR  | 011.44.1644.429261 | 2006-03-24 | SA_REP     |  8600.00 |           0.20 |        149 |            80 |
+    |         177 | Jack        | Livingston  | JLIVINGS | 011.44.1644.429260 | 2006-04-23 | SA_REP     |  8400.00 |           0.20 |        149 |            80 |
+    |         178 | Kimberely   | Grant       | KGRANT   | 011.44.1644.429259 | 2007-05-24 | SA_REP     |  7000.00 |           0.15 |        149 |            80 |
+    |         179 | Charles     | Johnson     | CJOHNSON | 011.44.1644.429258 | 2008-01-04 | SA_REP     |  6200.00 |           0.10 |        149 |            80 |
+    |         180 | Winston     | Taylor      | WTAYLOR  | 650.507.9876       | 2006-01-24 | SH_CLERK   |  3200.00 |           NULL |        120 |            50 |
+    |         181 | Jean        | Fleaur      | JFLEAUR  | 650.507.9827       | 2006-02-23 | SH_CLERK   |  3100.00 |           NULL |        120 |            50 |
+    |         182 | Martha      | Sullivan    | MSULLIVA | 650.507.9825       | 2007-06-21 | SH_CLERK   |  2500.00 |           NULL |        120 |            50 |
+    |         183 | Girard      | Geoni       | GGEONI   | 650.507.9814       | 2008-02-03 | SH_CLERK   |  2800.00 |           NULL |        120 |            50 |
+    |         184 | Nandita     | Sarchand    | NSARCHAN | 650.509.1876       | 2004-01-27 | SH_CLERK   |  4200.00 |           NULL |        121 |            50 |
+    |         185 | Alexis      | Bull        | ABULL    | 650.509.8076       | 2005-02-20 | SH_CLERK   |  4100.00 |           NULL |        121 |            50 |
+    |         186 | Julia       | Dellinger   | JDELLING | 650.509.8077       | 2006-06-24 | SH_CLERK   |  3400.00 |           NULL |        121 |            50 |
+    |         187 | Anthony     | Cabrio      | ACABRIO  | 650.509.8078       | 2007-02-07 | SH_CLERK   |  3000.00 |           NULL |        121 |            50 |
+    |         188 | Kelly       | Chung       | KCHUNG   | 650.505.1876       | 2005-06-14 | SH_CLERK   |  3800.00 |           NULL |        122 |            50 |
+    |         189 | Jennifer    | Dilly       | JDILLY   | 650.505.2876       | 2005-08-13 | SH_CLERK   |  3600.00 |           NULL |        122 |            50 |
+    |         190 | Timothy     | Gates       | TGATES   | 650.505.3876       | 2006-07-11 | SH_CLERK   |  2900.00 |           NULL |        122 |            50 |
+    |         191 | Randall     | Perkins     | RPERKINS | 650.505.4876       | 2007-12-19 | SH_CLERK   |  2500.00 |           NULL |        122 |            50 |
+    |         192 | Sarah       | Bell        | SBELL    | 650.501.1876       | 2004-02-04 | SH_CLERK   |  4000.00 |           NULL |        123 |            50 |
+    |         193 | Britney     | Everett     | BEVERETT | 650.501.2876       | 2005-03-03 | SH_CLERK   |  3900.00 |           NULL |        123 |            50 |
+    |         194 | Samuel      | McCain      | SMCCAIN  | 650.501.3876       | 2006-07-01 | SH_CLERK   |  3200.00 |           NULL |        123 |            50 |
+    |         195 | Vance       | Jones       | VJONES   | 650.501.4876       | 2007-03-17 | SH_CLERK   |  2800.00 |           NULL |        123 |            50 |
+    |         196 | Alana       | Walsh       | AWALSH   | 650.507.9811       | 2006-04-24 | SH_CLERK   |  3100.00 |           NULL |        124 |            50 |
+    |         197 | Kevin       | Feeney      | KFEENEY  | 650.507.9821       | 2006-05-23 | SH_CLERK   |  3000.00 |           NULL |        124 |            50 |
+    |         198 | Donald      | OConnell    | DOCONNEL | 650.507.9822       | 2007-06-21 | SH_CLERK   |  2600.00 |           NULL |        124 |            50 |
+    |         199 | Douglas     | Grant       | DGRANT   | 650.507.9833       | 2008-01-13 | SH_CLERK   |  2600.00 |           NULL |        124 |            50 |
+    |         200 | Jennifer    | Whalen      | JWHALEN  | 515.123.4444       | 2003-09-17 | AD_ASST    |  4400.00 |           NULL |        101 |            10 |
+    |         201 | Michael     | Hartstein   | MHARTSTE | 515.123.5555       | 2004-02-17 | MK_MAN     | 13000.00 |           NULL |        100 |            20 |
+    |         202 | Pat         | Fay         | PFAY     | 603.123.6666       | 2005-08-17 | MK_REP     |  6000.00 |           NULL |        201 |            20 |
+    |         203 | Susan       | Mavris      | SMAVRIS  | 515.123.7777       | 2002-06-07 | HR_REP     |  6500.00 |           NULL |        101 |            40 |
+    |         204 | Hermann     | Baer        | HBAER    | 515.123.8888       | 2002-06-07 | PR_REP     | 10000.00 |           NULL |        101 |            70 |
+    |         205 | Shelley     | Higgins     | SHIGGINS | 515.123.8080       | 2002-06-07 | AC_MGR     | 12000.00 |           NULL |        101 |           110 |
+    |         206 | William     | Gietz       | WGIETZ   | 515.123.8181       | 2002-06-07 | AC_ACCOUNT |  8300.00 |           NULL |        205 |           110 |
+    +-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+    107 rows in set (0.00 sec)
+
+INSERT INTO departments (
+    DEPARTMENT_ID, DEPARTMENT_NAME, MANAGER_ID, LOCATION_ID
+) VALUES
+    (10, 'Administration', 200, 1700),
+    (20, 'Marketing', 201, 1800),
+    (30, 'Purchasing', 114, 1700),
+    (40, 'Human Resources', 203, 2400),
+    (50, 'Shipping', 121, 1500),
+    (60, 'IT', 103, 1400),
+    (70, 'Public Relations', 204, 2700),
+    (80, 'Sales', 145, 2500),
+    (90, 'Executive', 100, 1700),
+    (100, 'Finance', 108, 1700),
+    (110, 'Accounting', 205, 1700),
+    (120, 'Treasury', NULL, 1700),
+    (130, 'Corporate Tax', NULL, 1700),
+    (140, 'Control And Credit', NULL, 1700),
+    (150, 'Shareholder Services', NULL, 1700),
+    (160, 'Benefits', NULL, 1700),
+    (170, 'Manufacturing', NULL, 1700),
+    (180, 'Construction', NULL, 1700),
+    (190, 'Contracting', NULL, 1700),
+    (200, 'Operations', NULL, 1700),
+    (210, 'IT Support', NULL, 1700),
+    (220, 'NOC', NULL, 1700),
+    (230, 'IT Helpdesk', NULL, 1700),
+    (240, 'Government Sales', NULL, 1700),
+    (250, 'Retail Sales', NULL, 1700),
+    (260, 'Recruiting', NULL, 1700),
+    (270, 'Payroll', NULL, 1700);
+
+ROWS:
+    +---------------+----------------------+------------+-------------+
+    | DEPARTMENT_ID | DEPARTMENT_NAME      | MANAGER_ID | LOCATION_ID |
+    +---------------+----------------------+------------+-------------+
+    |            10 | Administration       |        200 |        1700 |
+    |            20 | Marketing            |        201 |        1800 |
+    |            30 | Purchasing           |        114 |        1700 |
+    |            40 | Human Resources      |        203 |        2400 |
+    |            50 | Shipping             |        121 |        1500 |
+    |            60 | IT                   |        103 |        1400 |
+    |            70 | Public Relations     |        204 |        2700 |
+    |            80 | Sales                |        145 |        2500 |
+    |            90 | Executive            |        100 |        1700 |
+    |           100 | Finance              |        108 |        1700 |
+    |           110 | Accounting           |        205 |        1700 |
+    |           120 | Treasury             |       NULL |        1700 |
+    |           130 | Corporate Tax        |       NULL |        1700 |
+    |           140 | Control And Credit   |       NULL |        1700 |
+    |           150 | Shareholder Services |       NULL |        1700 |
+    |           160 | Benefits             |       NULL |        1700 |
+    |           170 | Manufacturing        |       NULL |        1700 |
+    |           180 | Construction         |       NULL |        1700 |
+    |           190 | Contracting          |       NULL |        1700 |
+    |           200 | Operations           |       NULL |        1700 |
+    |           210 | IT Support           |       NULL |        1700 |
+    |           220 | NOC                  |       NULL |        1700 |
+    |           230 | IT Helpdesk          |       NULL |        1700 |
+    |           240 | Government Sales     |       NULL |        1700 |
+    |           250 | Retail Sales         |       NULL |        1700 |
+    |           260 | Recruiting           |       NULL |        1700 |
+    |           270 | Payroll              |       NULL |        1700 |
+    +---------------+----------------------+------------+-------------+
+    27 rows in set (0.00 sec)
+
+INSERT INTO locations (
+    LOCATION_ID, STREET_ADDRESS, POSTAL_CODE, CITY, STATE_PROVINCE, COUNTRY_ID
+) VALUES
+    (1000, '1297 Via Cola di Rie', '00989', 'Roma', NULL, 'IT'),
+    (1100, '93091 Calle della Testa', '10934', 'Venice', NULL, 'IT'),
+    (1200, '2017 Shinjuku-ku', '1689', 'Tokyo', 'Tokyo Prefecture', 'JP'),
+    (1300, '9450 Kamiya-cho', '6823', 'Hiroshima', NULL, 'JP'),
+    (1400, '2014 Jabberwocky Rd', '26192', 'Southlake', 'Texas', 'US'),
+    (1500, '2011 Interiors Blvd', '99236', 'South San Francisco', 'California', 'US'),
+    (1600, '2007 Zagora St', '50090', 'South Brunswick', 'New Jersey', 'US'),
+    (1700, '2004 Charade Rd', '98199', 'Seattle', 'Washington', 'US'),
+    (1800, '147 Spadina Ave', 'M5V 2L7', 'Toronto', 'Ontario', 'CA'),
+    (1900, '6092 Boxwood St', 'YR2 2F2', 'Whitehorse', 'Yukon', 'CA'),
+    (2000, '40-5-12 Laogianggen', '190518', 'Beijing', NULL, 'CN'),
+    (2100, '1298 Vileparle (E)', '490231', 'Bombay', 'Maharashtra', 'IN'),
+    (2200, '12-98 Victoria Street', '2901', 'Sydney', 'New South Wales', 'AU'),
+    (2300, '198 Clementi North', '540198', 'Singapore', NULL, 'SG'),
+    (2400, '8204 Arthur St', '4209', 'London', NULL, 'UK'),
+    (2500, '3700 Rio', '2870', 'Sao Paulo', 'SP', 'BR'),
+    (2600, '22 Rue Halles', '31000', 'Toulouse', NULL, 'FR'),
+    (2700, '34-45 Rue Meslay', '75003', 'Paris', NULL, 'FR');
+
++-------------+-------------------------+-------------+---------------------+------------------+------------+
+| LOCATION_ID | STREET_ADDRESS          | POSTAL_CODE | CITY                | STATE_PROVINCE   | COUNTRY_ID |
++-------------+-------------------------+-------------+---------------------+------------------+------------+
+|        1000 | 1297 Via Cola di Rie    | 00989       | Roma                | NULL             | IT         |
+|        1100 | 93091 Calle della Testa | 10934       | Venice              | NULL             | IT         |
+|        1200 | 2017 Shinjuku-ku        | 1689        | Tokyo               | Tokyo Prefecture | JP         |
+|        1300 | 9450 Kamiya-cho         | 6823        | Hiroshima           | NULL             | JP         |
+|        1400 | 2014 Jabberwocky Rd     | 26192       | Southlake           | Texas            | US         |
+|        1500 | 2011 Interiors Blvd     | 99236       | South San Francisco | California       | US         |
+|        1600 | 2007 Zagora St          | 50090       | South Brunswick     | New Jersey       | US         |
+|        1700 | 2004 Charade Rd         | 98199       | Seattle             | Washington       | US         |
+|        1800 | 147 Spadina Ave         | M5V 2L7     | Toronto             | Ontario          | CA         |
+|        1900 | 6092 Boxwood St         | YR2 2F2     | Whitehorse          | Yukon            | CA         |
+|        2000 | 40-5-12 Laogianggen     | 190518      | Beijing             | NULL             | CN         |
+|        2100 | 1298 Vileparle (E)      | 490231      | Bombay              | Maharashtra      | IN         |
+|        2200 | 12-98 Victoria Street   | 2901        | Sydney              | New South Wales  | AU         |
+|        2300 | 198 Clementi North      | 540198      | Singapore           | NULL             | SG         |
+|        2400 | 8204 Arthur St          | 4209        | London              | NULL             | UK         |
+|        2500 | 3700 Rio                | 2870        | Sao Paulo           | SP               | BR         |
+|        2600 | 22 Rue Halles           | 31000       | Toulouse            | NULL             | FR         |
+|        2700 | 34-45 Rue Meslay        | 75003       | Paris               | NULL             | FR         |
++-------------+-------------------------+-------------+---------------------+------------------+------------+
+18 rows in set (0.00 sec)
+
+INSERT INTO countries (
+    COUNTRY_ID, COUNTRY_NAME, REGION_ID
+) VALUES
+    ('AR', 'Argentina', 2),
+    ('AU', 'Australia', 3),
+    ('BE', 'Belgium', 1),
+    ('BR', 'Brazil', 2),
+    ('CA', 'Canada', 2),
+    ('CH', 'Switzerland', 1),
+    ('CN', 'China', 3),
+    ('DE', 'Germany', 1),
+    ('DK', 'Denmark', 1),
+    ('EG', 'Egypt', 4),
+    ('FR', 'France', 1),
+    ('IL', 'Israel', 4),
+    ('IN', 'India', 3),
+    ('IT', 'Italy', 1),
+    ('JP', 'Japan', 3),
+    ('KW', 'Kuwait', 4),
+    ('ML', 'Malaysia', 3),
+    ('MX', 'Mexico', 2),
+    ('NG', 'Nigeria', 4),
+    ('NL', 'Netherlands', 1),
+    ('SG', 'Singapore', 3),
+    ('UK', 'United Kingdom', 1),
+    ('US', 'United States of America', 2),
+    ('ZM', 'Zambia', 4),
+    ('ZW', 'Zimbabwe', 4);
+
++------------+--------------------------+-----------+
+| COUNTRY_ID | COUNTRY_NAME             | REGION_ID |
++------------+--------------------------+-----------+
+| AR         | Argentina                |         2 |
+| AU         | Australia                |         3 |
+| BE         | Belgium                  |         1 |
+| BR         | Brazil                   |         2 |
+| CA         | Canada                   |         2 |
+| CH         | Switzerland              |         1 |
+| CN         | China                    |         3 |
+| DE         | Germany                  |         1 |
+| DK         | Denmark                  |         1 |
+| EG         | Egypt                    |         4 |
+| FR         | France                   |         1 |
+| IL         | Israel                   |         4 |
+| IN         | India                    |         3 |
+| IT         | Italy                    |         1 |
+| JP         | Japan                    |         3 |
+| KW         | Kuwait                   |         4 |
+| ML         | Malaysia                 |         3 |
+| MX         | Mexico                   |         2 |
+| NG         | Nigeria                  |         4 |
+| NL         | Netherlands              |         1 |
+| SG         | Singapore                |         3 |
+| UK         | United Kingdom           |         1 |
+| US         | United States of America |         2 |
+| ZM         | Zambia                   |         4 |
+| ZW         | Zimbabwe                 |         4 |
++------------+--------------------------+-----------+
+25 rows in set (0.00 sec)
+
+INSERT INTO job_history (
+    EMPLOYEE_ID, START_DATE, END_DATE, JOB_ID, DEPARTMENT_ID
+) VALUES
+    (102, '2001-01-13', '2006-07-24', 'IT_PROG', 60),
+    (101, '1997-09-21', '2001-10-27', 'AC_ACCOUNT', 110),
+    (101, '2001-10-28', '2005-03-15', 'AC_MGR', 110),
+    (201, '2004-02-17', '2007-12-19', 'MK_REP', 20),
+    (114, '2006-03-24', '2007-12-31', 'ST_CLERK', 50),
+    (122, '2007-01-01', '2007-12-31', 'ST_CLERK', 50),
+    (200, '1995-09-17', '2001-06-17', 'AD_ASST', 90),
+    (176, '2006-03-24', '2006-12-31', 'SA_REP', 80),
+    (176, '2007-01-01', '2007-12-31', 'SA_MAN', 80),
+    (200, '2002-07-01', '2006-12-31', 'AC_ACCOUNT', 90);
+
++-------------+------------+------------+------------+---------------+
+| EMPLOYEE_ID | START_DATE | END_DATE   | JOB_ID     | DEPARTMENT_ID |
++-------------+------------+------------+------------+---------------+
+|         102 | 2001-01-13 | 2006-07-24 | IT_PROG    |            60 |
+|         101 | 1997-09-21 | 2001-10-27 | AC_ACCOUNT |           110 |
+|         101 | 2001-10-28 | 2005-03-15 | AC_MGR     |           110 |
+|         201 | 2004-02-17 | 2007-12-19 | MK_REP     |            20 |
+|         114 | 2006-03-24 | 2007-12-31 | ST_CLERK   |            50 |
+|         122 | 2007-01-01 | 2007-12-31 | ST_CLERK   |            50 |
+|         200 | 1995-09-17 | 2001-06-17 | AD_ASST    |            90 |
+|         176 | 2006-03-24 | 2006-12-31 | SA_REP     |            80 |
+|         176 | 2007-01-01 | 2007-12-31 | SA_MAN     |            80 |
+|         200 | 2002-07-01 | 2006-12-31 | AC_ACCOUNT |            90 |
++-------------+------------+------------+------------+---------------+
+10 rows in set (0.00 sec)
+
+INSERT INTO jobs (
+    JOB_ID, JOB_TITLE, MIN_SALARY, MAX_SALARY
+) VALUES
+    ('AD_PRES', 'President', 20080, 40000),
+    ('AD_VP', 'Administration Vice President', 15000, 30000),
+    ('AD_ASST', 'Administration Assistant', 3000, 6000),
+    ('FI_MGR', 'Finance Manager', 8200, 16000),
+    ('FI_ACCOUNT', 'Accountant', 4200, 9000),
+    ('AC_MGR', 'Accounting Manager', 8200, 16000),
+    ('AC_ACCOUNT', 'Public Accountant', 4200, 9000),
+    ('SA_MAN', 'Sales Manager', 10000, 20080),
+    ('SA_REP', 'Sales Representative', 6000, 12008),
+    ('PU_MAN', 'Purchasing Manager', 8000, 15000),
+    ('PU_CLERK', 'Purchasing Clerk', 2500, 5500),
+    ('ST_MAN', 'Stock Manager', 5500, 8500),
+    ('ST_CLERK', 'Stock Clerk', 2008, 5000),
+    ('SH_CLERK', 'Shipping Clerk', 2500, 5500),
+    ('IT_PROG', 'Programmer', 4000, 10000),
+    ('MK_MAN', 'Marketing Manager', 9000, 15000),
+    ('MK_REP', 'Marketing Representative', 4000, 9000),
+    ('HR_REP', 'Human Resources Representative', 4000, 9000),
+    ('PR_REP', 'Public Relations Representative', 4500, 10500);
+
++------------+---------------------------------+------------+------------+
+| JOB_ID     | JOB_TITLE                       | MAX_SALARY | MIN_SALARY |
++------------+---------------------------------+------------+------------+
+| AC_ACCOUNT | Public Accountant               |       9000 |       4200 |
+| AC_MGR     | Accounting Manager              |      16000 |       8200 |
+| AD_ASST    | Administration Assistant        |       6000 |       3000 |
+| AD_PRES    | President                       |      40000 |      20080 |
+| AD_VP      | Administration Vice President   |      30000 |      15000 |
+| FI_ACCOUNT | Accountant                      |       9000 |       4200 |
+| FI_MGR     | Finance Manager                 |      16000 |       8200 |
+| HR_REP     | Human Resources Representative  |       9000 |       4000 |
+| IT_PROG    | Programmer                      |      10000 |       4000 |
+| MK_MAN     | Marketing Manager               |      15000 |       9000 |
+| MK_REP     | Marketing Representative        |       9000 |       4000 |
+| PR_REP     | Public Relations Representative |      10500 |       4500 |
+| PU_CLERK   | Purchasing Clerk                |       5500 |       2500 |
+| PU_MAN     | Purchasing Manager              |      15000 |       8000 |
+| SA_MAN     | Sales Manager                   |      20080 |      10000 |
+| SA_REP     | Sales Representative            |      12008 |       6000 |
+| SH_CLERK   | Shipping Clerk                  |       5500 |       2500 |
+| ST_CLERK   | Stock Clerk                     |       5000 |       2008 |
+| ST_MAN     | Stock Manager                   |       8500 |       5500 |
++------------+---------------------------------+------------+------------+
+19 rows in set (0.00 sec)
+
+~~~~~~~~~~~~~~~ Queries ~~~~~~~~~~~~~~~
+
+1. Write a query to display the name (first name and last name) for those employees whogets more salary than the employee whose ID is 163.
+
+select concat(FIRST_NAME, ' ', LAST_NAME) as NAME
+from employees
+where SALARY > (
+	select salary 
+    from employees
+    where employee_ID = 163    
+);
+
++-------------------+
+| NAME              |
++-------------------+
+| Steven King       |
+| Neena Kochhar     |
+| Lex De Haan       |
+| Nancy Greenberg   |
+| Den Raphaely      |
+| John Russell      |
+| Karen Partners    |
+| Alberto Errazuriz |
+| Gerald Cambrault  |
+| Eleni Zlotkey     |
+| Peter Tucker      |
+| Janette King      |
+| Clara Vishney     |
+| Lisa Ozer         |
+| Harrison Bloom    |
+| Tayler Fox        |
+| Ellen Abel        |
+| Michael Hartstein |
+| Hermann Baer      |
+| Shelley Higgins   |
++-------------------+
+20 rows in set (0.00 sec)
+
+2. Write a query to display the name (first name and last name), salary, department id, job id for those employees who works in the same designation as the employee works whose id is 169.
+
+select 
+	concat(FIRST_NAME, ' ', LAST_NAME) as NAME,
+    SALARY,
+    DEPARTMENT_ID,
+    JOB_ID
+from employees
+where JOB_ID in (
+	select JOB_ID
+    from employees
+	where EMPLOYEE_ID = 169
+);
+
++-------------------+----------+---------------+--------+
+| NAME              | SALARY   | DEPARTMENT_ID | JOB_ID |
++-------------------+----------+---------------+--------+
+| Peter Tucker      | 10000.00 |            80 | SA_REP |
+| David Bernstein   |  9500.00 |            80 | SA_REP |
+| Peter Hall        |  9000.00 |            80 | SA_REP |
+| Christopher Olsen |  8000.00 |            80 | SA_REP |
+| Nanette Cambrault |  7500.00 |            80 | SA_REP |
+| Oliver Tuvault    |  7000.00 |            80 | SA_REP |
+| Janette King      | 10000.00 |            80 | SA_REP |
+| Patrick Sully     |  9500.00 |            80 | SA_REP |
+| Allan McEwen      |  9000.00 |            80 | SA_REP |
+| Lindsey Smith     |  8000.00 |            80 | SA_REP |
+| Louise Doran      |  7500.00 |            80 | SA_REP |
+| Sarath Sewall     |  7000.00 |            80 | SA_REP |
+| Clara Vishney     | 10500.00 |            80 | SA_REP |
+| Danielle Greene   |  9500.00 |            80 | SA_REP |
+| Mattea Marvins    |  7200.00 |            80 | SA_REP |
+| David Lee         |  6800.00 |            80 | SA_REP |
+| Sundar Ande       |  6400.00 |            80 | SA_REP |
+| Amit Banda        |  6200.00 |            80 | SA_REP |
+| Lisa Ozer         | 11500.00 |            80 | SA_REP |
+| Harrison Bloom    | 10000.00 |            80 | SA_REP |
+| Tayler Fox        |  9600.00 |            80 | SA_REP |
+| William Smith     |  7400.00 |            80 | SA_REP |
+| Elizabeth Bates   |  7300.00 |            80 | SA_REP |
+| Sundita Kumar     |  6100.00 |            80 | SA_REP |
+| Ellen Abel        | 11000.00 |            80 | SA_REP |
+| Alyssa Hutton     |  8800.00 |            80 | SA_REP |
+| Jonathon Taylor   |  8600.00 |            80 | SA_REP |
+| Jack Livingston   |  8400.00 |            80 | SA_REP |
+| Kimberely Grant   |  7000.00 |            80 | SA_REP |
+| Charles Johnson   |  6200.00 |            80 | SA_REP |
++-------------------+----------+---------------+--------+
+30 rows in set (0.00 sec)
+
+3. Write a query to display the name (first name and last name), salary, department id for those employees who earn such amount of salary which is the smallest salary of any of the departments.
+
+select 
+	concat(FIRST_NAME, ' ', LAST_NAME) as NAME,
+    SALARY,
+    DEPARTMENT_ID,
+    JOB_ID
+from employees
+where SALARY in (
+	select min(SALARY)
+    from employees
+    group by DEPARTMENT_ID
+)
+order by DEPARTMENT_ID;
+
++------------------+----------+---------------+------------+
+| NAME             | SALARY   | DEPARTMENT_ID | JOB_ID     |
++------------------+----------+---------------+------------+
+| Jennifer Whalen  |  4400.00 |            10 | AD_ASST    |
+| Pat Fay          |  6000.00 |            20 | MK_REP     |
+| Karen Colmenares |  2500.00 |            30 | PU_CLERK   |
+| Susan Mavris     |  6500.00 |            40 | HR_REP     |
+| Shanta Vollman   |  6500.00 |            50 | ST_MAN     |
+| James Marlow     |  2500.00 |            50 | ST_CLERK   |
+| TJ Olson         |  2100.00 |            50 | ST_CLERK   |
+| Joshua Patel     |  2500.00 |            50 | ST_CLERK   |
+| Peter Vargas     |  2500.00 |            50 | ST_CLERK   |
+| Martha Sullivan  |  2500.00 |            50 | SH_CLERK   |
+| Nandita Sarchand |  4200.00 |            50 | SH_CLERK   |
+| Randall Perkins  |  2500.00 |            50 | SH_CLERK   |
+| Bruce Ernst      |  6000.00 |            60 | IT_PROG    |
+| Diana Lorentz    |  4200.00 |            60 | IT_PROG    |
+| Hermann Baer     | 10000.00 |            70 | PR_REP     |
+| Peter Tucker     | 10000.00 |            80 | SA_REP     |
+| Janette King     | 10000.00 |            80 | SA_REP     |
+| Harrison Bloom   | 10000.00 |            80 | SA_REP     |
+| Sundita Kumar    |  6100.00 |            80 | SA_REP     |
+| Neena Kochhar    | 17000.00 |            90 | AD_VP      |
+| Lex De Haan      | 17000.00 |            90 | AD_VP      |
+| Luis Popp        |  6900.00 |           100 | FI_ACCOUNT |
+| William Gietz    |  8300.00 |           110 | AC_ACCOUNT |
++------------------+----------+---------------+------------+
+23 rows in set (0.00 sec)
+
+4. Write a query to display the employee id, employee name (first name and last name)
+for all employees who earn more than the average salary.
+
+select 
+	EMPLOYEE_ID,
+	concat(FIRST_NAME, ' ', LAST_NAME) as NAME,
+    SALARY
+from employees
+where SALARY > (
+	select avg(SALARY)
+    from employees
+)
+order by SALARY desc;
+
++-------------+-------------------+----------+
+| EMPLOYEE_ID | NAME              | SALARY   |
++-------------+-------------------+----------+
+|         100 | Steven King       | 24000.00 |
+|         101 | Neena Kochhar     | 17000.00 |
+|         102 | Lex De Haan       | 17000.00 |
+|         145 | John Russell      | 14000.00 |
+|         146 | Karen Partners    | 13500.00 |
+|         201 | Michael Hartstein | 13000.00 |
+|         108 | Nancy Greenberg   | 12008.00 |
+|         147 | Alberto Errazuriz | 12000.00 |
+|         205 | Shelley Higgins   | 12000.00 |
+|         168 | Lisa Ozer         | 11500.00 |
+|         114 | Den Raphaely      | 11000.00 |
+|         148 | Gerald Cambrault  | 11000.00 |
+|         174 | Ellen Abel        | 11000.00 |
+|         162 | Clara Vishney     | 10500.00 |
+|         149 | Eleni Zlotkey     | 10500.00 |
+|         169 | Harrison Bloom    | 10000.00 |
+|         156 | Janette King      | 10000.00 |
+|         150 | Peter Tucker      | 10000.00 |
+|         204 | Hermann Baer      | 10000.00 |
+|         170 | Tayler Fox        |  9600.00 |
+|         163 | Danielle Greene   |  9500.00 |
+|         151 | David Bernstein   |  9500.00 |
+|         157 | Patrick Sully     |  9500.00 |
+|         103 | Alexander Hunold  |  9000.00 |
+|         109 | Daniel Faviet     |  9000.00 |
+|         158 | Allan McEwen      |  9000.00 |
+|         152 | Peter Hall        |  9000.00 |
+|         175 | Alyssa Hutton     |  8800.00 |
+|         176 | Jonathon Taylor   |  8600.00 |
+|         177 | Jack Livingston   |  8400.00 |
+|         206 | William Gietz     |  8300.00 |
+|         110 | John Chen         |  8200.00 |
+|         121 | Adam Fripp        |  8200.00 |
+|         120 | Matthew Weiss     |  8000.00 |
+|         153 | Christopher Olsen |  8000.00 |
+|         159 | Lindsey Smith     |  8000.00 |
+|         122 | Payam Kaufling    |  7900.00 |
+|         112 | Jose Manuel Urman |  7800.00 |
+|         111 | Ismael Sciarra    |  7700.00 |
+|         154 | Nanette Cambrault |  7500.00 |
+|         160 | Louise Doran      |  7500.00 |
+|         171 | William Smith     |  7400.00 |
+|         172 | Elizabeth Bates   |  7300.00 |
+|         164 | Mattea Marvins    |  7200.00 |
+|         155 | Oliver Tuvault    |  7000.00 |
+|         178 | Kimberely Grant   |  7000.00 |
+|         161 | Sarath Sewall     |  7000.00 |
+|         113 | Luis Popp         |  6900.00 |
+|         165 | David Lee         |  6800.00 |
+|         123 | Shanta Vollman    |  6500.00 |
+|         203 | Susan Mavris      |  6500.00 |
++-------------+-------------------+----------+
+51 rows in set (0.00 sec)
+
+5. Write a query to display the employee name (first name and last name), employee id and salary of all employees who report to Payam.
+
+select 
+	concat(FIRST_NAME, ' ', LAST_NAME) as NAME,
+    EMPLOYEE_ID,
+    SALARY
+from employees
+where MANAGER_ID in (
+	select EMPLOYEE_ID
+    from employees
+    where FIRST_NAME = 'Payam'
+);
+
++------------------+-------------+---------+
+| NAME             | EMPLOYEE_ID | SALARY  |
++------------------+-------------+---------+
+| Jason Mallin     |         133 | 3300.00 |
+| Michael Rogers   |         134 | 2900.00 |
+| Ki Gee           |         135 | 2400.00 |
+| Hazel Philtanker |         136 | 2200.00 |
+| Kelly Chung      |         188 | 3800.00 |
+| Jennifer Dilly   |         189 | 3600.00 |
+| Timothy Gates    |         190 | 2900.00 |
+| Randall Perkins  |         191 | 2500.00 |
++------------------+-------------+---------+
+8 rows in set (0.00 sec)
+
+6. Write a query to display the department number, name (first name and last name),
+job_id and department name for all employees in the Finance department or
+Purchasing department . (Use SET operator)
+
+select
+	E.DEPARTMENT_ID,
+	concat(E.FIRST_NAME, ' ', E.LAST_NAME) as NAME,
+    E.JOB_ID,
+    E.DEPARTMENT_ID
+from employees E
+where E.DEPARTMENT_ID in(
+	select D.DEPARTMENT_ID
+    from departments D
+    where D.DEPARTMENT_NAME in ('Finance', 'Purchasing')
+);
+
++---------------+-------------------+------------+---------------+
+| DEPARTMENT_ID | NAME              | JOB_ID     | DEPARTMENT_ID |
++---------------+-------------------+------------+---------------+
+|            30 | Den Raphaely      | PU_MAN     |            30 |
+|            30 | Alexander Khoo    | PU_CLERK   |            30 |
+|            30 | Shelli Baida      | PU_CLERK   |            30 |
+|            30 | Sigal Tobias      | PU_CLERK   |            30 |
+|            30 | Guy Himuro        | PU_CLERK   |            30 |
+|            30 | Karen Colmenares  | PU_CLERK   |            30 |
+|           100 | Nancy Greenberg   | FI_MGR     |           100 |
+|           100 | Daniel Faviet     | FI_ACCOUNT |           100 |
+|           100 | John Chen         | FI_ACCOUNT |           100 |
+|           100 | Ismael Sciarra    | FI_ACCOUNT |           100 |
+|           100 | Jose Manuel Urman | FI_ACCOUNT |           100 |
+|           100 | Luis Popp         | FI_ACCOUNT |           100 |
++---------------+-------------------+------------+---------------+
+12 rows in set (0.00 sec)
+
+7. Write a query to display all the information of an employee whose salary and
+reporting person id is 3000 and 121, respectively.
+
+select *
+from employees
+where MANAGER_ID = 121
+	and SALARY = 3000;
+
++-------------+------------+-----------+---------+--------------+------------+----------+---------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL   | PHONE_NUMBER | HIRE_DATE  | JOB_ID   | SALARY  | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+---------+--------------+------------+----------+---------+----------------+------------+---------------+
+|         187 | Anthony    | Cabrio    | ACABRIO | 650.509.8078 | 2007-02-07 | SH_CLERK | 3000.00 |           NULL |        121 |            50 |
++-------------+------------+-----------+---------+--------------+------------+----------+---------+----------------+------------+---------------+
+1 row in set (0.00 sec)
+
+8. Display all the information of an employee whose id is any of the number 134, 159
+and 183.
+
+select *
+from employees
+where EMPLOYEE_ID in (134, 159, 183);
+
++-------------+------------+-----------+---------+--------------------+------------+----------+---------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL   | PHONE_NUMBER       | HIRE_DATE  | JOB_ID   | SALARY  | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+---------+--------------------+------------+----------+---------+----------------+------------+---------------+
+|         134 | Michael    | Rogers    | MROGERS | 650.127.1834       | 2006-08-26 | ST_CLERK | 2900.00 |           0.00 |        122 |            50 |
+|         159 | Lindsey    | Smith     | LSMITH  | 011.44.1343.929268 | 2005-03-10 | SA_REP   | 8000.00 |           0.30 |        146 |            80 |
+|         183 | Girard     | Geoni     | GGEONI  | 650.507.9814       | 2008-02-03 | SH_CLERK | 2800.00 |           NULL |        120 |            50 |
++-------------+------------+-----------+---------+--------------------+------------+----------+---------+----------------+------------+---------------+
+
+9. Write a query to display all the information of the employees whose salary is within
+the range 1000 and 3000.
+
+select *
+from employees
+where salary between 1000 and 3000;
+
++-------------+------------+-------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME   | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID   | SALARY  | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+|         116 | Shelli     | Baida       | SBAIDA   | 515.127.4563 | 2005-12-24 | PU_CLERK | 2900.00 |           0.00 |        114 |            30 |
+|         117 | Sigal      | Tobias      | STOBIAS  | 515.127.4564 | 2005-07-24 | PU_CLERK | 2800.00 |           0.00 |        114 |            30 |
+|         118 | Guy        | Himuro      | GHIMURO  | 515.127.4565 | 2006-11-15 | PU_CLERK | 2600.00 |           0.00 |        114 |            30 |
+|         119 | Karen      | Colmenares  | KCOLMENA | 515.127.4566 | 2007-08-10 | PU_CLERK | 2500.00 |           0.00 |        114 |            30 |
+|         126 | Irene      | Mikkilineni | IMIKKILI | 650.124.1224 | 2006-09-28 | ST_CLERK | 2700.00 |           0.00 |        120 |            50 |
+|         127 | James      | Landry      | JLANDRY  | 650.124.1334 | 2007-01-14 | ST_CLERK | 2400.00 |           0.00 |        120 |            50 |
+|         128 | Steven     | Markle      | SMARKLE  | 650.124.1434 | 2008-03-08 | ST_CLERK | 2200.00 |           0.00 |        120 |            50 |
+|         130 | Mozhe      | Atkinson    | MATKINSO | 650.124.6234 | 2005-10-30 | ST_CLERK | 2800.00 |           0.00 |        121 |            50 |
+|         131 | James      | Marlow      | JAMRLOW  | 650.124.7234 | 2005-02-16 | ST_CLERK | 2500.00 |           0.00 |        121 |            50 |
+|         132 | TJ         | Olson       | TJOLSON  | 650.124.8234 | 2007-04-10 | ST_CLERK | 2100.00 |           0.00 |        121 |            50 |
+|         134 | Michael    | Rogers      | MROGERS  | 650.127.1834 | 2006-08-26 | ST_CLERK | 2900.00 |           0.00 |        122 |            50 |
+|         135 | Ki         | Gee         | KGEE     | 650.127.1734 | 2007-12-12 | ST_CLERK | 2400.00 |           0.00 |        122 |            50 |
+|         136 | Hazel      | Philtanker  | HPHILTAN | 650.127.1634 | 2008-02-06 | ST_CLERK | 2200.00 |           0.00 |        122 |            50 |
+|         139 | John       | Seo         | JSEO     | 650.121.2019 | 2006-02-12 | ST_CLERK | 2700.00 |           0.00 |        123 |            50 |
+|         140 | Joshua     | Patel       | JPATEL   | 650.121.1834 | 2006-04-06 | ST_CLERK | 2500.00 |           0.00 |        123 |            50 |
+|         143 | Randall    | Matos       | RMATOS   | 650.121.2874 | 2006-03-15 | ST_CLERK | 2600.00 |           0.00 |        124 |            50 |
+|         144 | Peter      | Vargas      | PVARGAS  | 650.121.2854 | 2006-07-09 | ST_CLERK | 2500.00 |           0.00 |        124 |            50 |
+|         182 | Martha     | Sullivan    | MSULLIVA | 650.507.9825 | 2007-06-21 | SH_CLERK | 2500.00 |           NULL |        120 |            50 |
+|         183 | Girard     | Geoni       | GGEONI   | 650.507.9814 | 2008-02-03 | SH_CLERK | 2800.00 |           NULL |        120 |            50 |
+|         187 | Anthony    | Cabrio      | ACABRIO  | 650.509.8078 | 2007-02-07 | SH_CLERK | 3000.00 |           NULL |        121 |            50 |
+|         190 | Timothy    | Gates       | TGATES   | 650.505.3876 | 2006-07-11 | SH_CLERK | 2900.00 |           NULL |        122 |            50 |
+|         191 | Randall    | Perkins     | RPERKINS | 650.505.4876 | 2007-12-19 | SH_CLERK | 2500.00 |           NULL |        122 |            50 |
+|         195 | Vance      | Jones       | VJONES   | 650.501.4876 | 2007-03-17 | SH_CLERK | 2800.00 |           NULL |        123 |            50 |
+|         197 | Kevin      | Feeney      | KFEENEY  | 650.507.9821 | 2006-05-23 | SH_CLERK | 3000.00 |           NULL |        124 |            50 |
+|         198 | Donald     | OConnell    | DOCONNEL | 650.507.9822 | 2007-06-21 | SH_CLERK | 2600.00 |           NULL |        124 |            50 |
+|         199 | Douglas    | Grant       | DGRANT   | 650.507.9833 | 2008-01-13 | SH_CLERK | 2600.00 |           NULL |        124 |            50 |
++-------------+------------+-------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+26 rows in set (0.00 sec)
+
+10. Write a query to display all the information of the employees whose salary is within
+the range of smallest salary and 2500. (Hint: use BETWEEN)
+
+select *
+from employees
+where salary between(
+	select min(salary)
+    from employees
+) and 2500;
+
++-------------+------------+------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME  | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID   | SALARY  | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+|         119 | Karen      | Colmenares | KCOLMENA | 515.127.4566 | 2007-08-10 | PU_CLERK | 2500.00 |           0.00 |        114 |            30 |
+|         127 | James      | Landry     | JLANDRY  | 650.124.1334 | 2007-01-14 | ST_CLERK | 2400.00 |           0.00 |        120 |            50 |
+|         128 | Steven     | Markle     | SMARKLE  | 650.124.1434 | 2008-03-08 | ST_CLERK | 2200.00 |           0.00 |        120 |            50 |
+|         131 | James      | Marlow     | JAMRLOW  | 650.124.7234 | 2005-02-16 | ST_CLERK | 2500.00 |           0.00 |        121 |            50 |
+|         132 | TJ         | Olson      | TJOLSON  | 650.124.8234 | 2007-04-10 | ST_CLERK | 2100.00 |           0.00 |        121 |            50 |
+|         135 | Ki         | Gee        | KGEE     | 650.127.1734 | 2007-12-12 | ST_CLERK | 2400.00 |           0.00 |        122 |            50 |
+|         136 | Hazel      | Philtanker | HPHILTAN | 650.127.1634 | 2008-02-06 | ST_CLERK | 2200.00 |           0.00 |        122 |            50 |
+|         140 | Joshua     | Patel      | JPATEL   | 650.121.1834 | 2006-04-06 | ST_CLERK | 2500.00 |           0.00 |        123 |            50 |
+|         144 | Peter      | Vargas     | PVARGAS  | 650.121.2854 | 2006-07-09 | ST_CLERK | 2500.00 |           0.00 |        124 |            50 |
+|         182 | Martha     | Sullivan   | MSULLIVA | 650.507.9825 | 2007-06-21 | SH_CLERK | 2500.00 |           NULL |        120 |            50 |
+|         191 | Randall    | Perkins    | RPERKINS | 650.505.4876 | 2007-12-19 | SH_CLERK | 2500.00 |           NULL |        122 |            50 |
++-------------+------------+------------+----------+--------------+------------+----------+---------+----------------+------------+---------------+
+11 rows in set (0.00 sec)
+
+11. Write a query to display all the information of the employees who does not work in
+those departments where some employees works whose manager id within the range
+100 and 200. (Hint: use NOT IN)
+
+select * 
+from employees
+where department_id not in (
+	select department_id
+    from employees
+    where manager_id between 100 and 200
+);
+
+Empty set (0.00 sec)
+
+12. Write a query to display all the information for those employees whose id is any id
+who earn the second highest salary.
+
+select *
+from employees
+where salary = (
+	select max(salary)
+    from employees
+    where salary < (
+		select max(salary)
+        from employees
+    )
+);
+
++-------------+------------+-----------+----------+--------------+------------+--------+----------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL    | PHONE_NUMBER | HIRE_DATE  | JOB_ID | SALARY   | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+----------+--------------+------------+--------+----------+----------------+------------+---------------+
+|         101 | Neena      | Kochhar   | NKOCHHAR | 515.123.4568 | 2005-09-21 | AD_VP  | 17000.00 |           0.00 |        100 |            90 |
+|         102 | Lex        | De Haan   | LDEHAAN  | 515.123.4569 | 2001-01-13 | AD_VP  | 17000.00 |           0.00 |        100 |            90 |
++-------------+------------+-----------+----------+--------------+------------+--------+----------+----------------+------------+---------------+
+2 rows in set (0.00 sec)
+
+13. Write a query to display the employee name (first name and last name) and hire date
+for all employees in the same department as Clara. Exclude Clara.
+
+select 
+	concat(e.FIRST_NAME, ' ', e.LAST_NAME) as NAME,
+    jh.start_date
+from employees e
+join job_history jh
+    on e.DEPARTMENT_ID = jh.DEPARTMENT_ID
+where e.DEPARTMENT_ID = (
+	select DEPARTMENT_ID
+    from employees
+    where FIRST_NAME = 'Clara'
+) and e.FIRST_NAME <> 'Clara';
+
++-------------------+------------+
+| NAME              | start_date |
++-------------------+------------+
+| John Russell      | 2006-03-24 |
+| Karen Partners    | 2006-03-24 |
+| Alberto Errazuriz | 2006-03-24 |
+| Gerald Cambrault  | 2006-03-24 |
+| Eleni Zlotkey     | 2006-03-24 |
+| Peter Tucker      | 2006-03-24 |
+| David Bernstein   | 2006-03-24 |
+| Peter Hall        | 2006-03-24 |
+| Christopher Olsen | 2006-03-24 |
+| Nanette Cambrault | 2006-03-24 |
+| Oliver Tuvault    | 2006-03-24 |
+| Janette King      | 2006-03-24 |
+| Patrick Sully     | 2006-03-24 |
+| Allan McEwen      | 2006-03-24 |
+| Lindsey Smith     | 2006-03-24 |
+| Louise Doran      | 2006-03-24 |
+| Sarath Sewall     | 2006-03-24 |
+| Danielle Greene   | 2006-03-24 |
+| Mattea Marvins    | 2006-03-24 |
+| David Lee         | 2006-03-24 |
+| Sundar Ande       | 2006-03-24 |
+| Amit Banda        | 2006-03-24 |
+| Lisa Ozer         | 2006-03-24 |
+| Harrison Bloom    | 2006-03-24 |
+| Tayler Fox        | 2006-03-24 |
+| William Smith     | 2006-03-24 |
+| Elizabeth Bates   | 2006-03-24 |
+| Sundita Kumar     | 2006-03-24 |
+| Ellen Abel        | 2006-03-24 |
+| Alyssa Hutton     | 2006-03-24 |
+| Jonathon Taylor   | 2006-03-24 |
+| Jack Livingston   | 2006-03-24 |
+| Kimberely Grant   | 2006-03-24 |
+| Charles Johnson   | 2006-03-24 |
+| John Russell      | 2007-01-01 |
+| Karen Partners    | 2007-01-01 |
+| Alberto Errazuriz | 2007-01-01 |
+| Gerald Cambrault  | 2007-01-01 |
+| Eleni Zlotkey     | 2007-01-01 |
+| Peter Tucker      | 2007-01-01 |
+| David Bernstein   | 2007-01-01 |
+| Peter Hall        | 2007-01-01 |
+| Christopher Olsen | 2007-01-01 |
+| Nanette Cambrault | 2007-01-01 |
+| Oliver Tuvault    | 2007-01-01 |
+| Janette King      | 2007-01-01 |
+| Patrick Sully     | 2007-01-01 |
+| Allan McEwen      | 2007-01-01 |
+| Lindsey Smith     | 2007-01-01 |
+| Louise Doran      | 2007-01-01 |
+| Sarath Sewall     | 2007-01-01 |
+| Danielle Greene   | 2007-01-01 |
+| Mattea Marvins    | 2007-01-01 |
+| David Lee         | 2007-01-01 |
+| Sundar Ande       | 2007-01-01 |
+| Amit Banda        | 2007-01-01 |
+| Lisa Ozer         | 2007-01-01 |
+| Harrison Bloom    | 2007-01-01 |
+| Tayler Fox        | 2007-01-01 |
+| William Smith     | 2007-01-01 |
+| Elizabeth Bates   | 2007-01-01 |
+| Sundita Kumar     | 2007-01-01 |
+| Ellen Abel        | 2007-01-01 |
+| Alyssa Hutton     | 2007-01-01 |
+| Jonathon Taylor   | 2007-01-01 |
+| Jack Livingston   | 2007-01-01 |
+| Kimberely Grant   | 2007-01-01 |
+| Charles Johnson   | 2007-01-01 |
++-------------------+------------+
+68 rows in set (0.00 sec)
+
+14. Write a query to display the employee number and name (first name and last name)
+for all employees who work in a department with any employee whose name contains
+a T. (Hint: Use of String operator)
+
+select 
+	employee_ID,
+    concat(FIRST_NAME, ' ', LAST_NAME) as NAME
+from employees
+where concat(FIRST_NAME, ' ', LAST_NAME) like '%t%';
+
++-------------+-------------------+
+| employee_ID | NAME              |
++-------------+-------------------+
+|         100 | Steven King       |
+|         104 | Bruce Ernst       |
+|         105 | David Austin      |
+|         106 | Valli Pataballa   |
+|         107 | Diana Lorentz     |
+|         109 | Daniel Faviet     |
+|         117 | Sigal Tobias      |
+|         120 | Matthew Weiss     |
+|         123 | Shanta Vollman    |
+|         128 | Steven Markle     |
+|         129 | Laura Bissot      |
+|         130 | Mozhe Atkinson    |
+|         132 | TJ Olson          |
+|         136 | Hazel Philtanker  |
+|         138 | Stephen Stiles    |
+|         140 | Joshua Patel      |
+|         141 | Trenna Rajs       |
+|         142 | Curtis Davies     |
+|         143 | Randall Matos     |
+|         144 | Peter Vargas      |
+|         146 | Karen Partners    |
+|         147 | Alberto Errazuriz |
+|         148 | Gerald Cambrault  |
+|         149 | Eleni Zlotkey     |
+|         150 | Peter Tucker      |
+|         151 | David Bernstein   |
+|         152 | Peter Hall        |
+|         153 | Christopher Olsen |
+|         154 | Nanette Cambrault |
+|         155 | Oliver Tuvault    |
+|         156 | Janette King      |
+|         157 | Patrick Sully     |
+|         159 | Lindsey Smith     |
+|         161 | Sarath Sewall     |
+|         164 | Mattea Marvins    |
+|         167 | Amit Banda        |
+|         170 | Tayler Fox        |
+|         171 | William Smith     |
+|         172 | Elizabeth Bates   |
+|         173 | Sundita Kumar     |
+|         175 | Alyssa Hutton     |
+|         176 | Jonathon Taylor   |
+|         177 | Jack Livingston   |
+|         178 | Kimberely Grant   |
+|         180 | Winston Taylor    |
+|         182 | Martha Sullivan   |
+|         184 | Nandita Sarchand  |
+|         187 | Anthony Cabrio    |
+|         190 | Timothy Gates     |
+|         193 | Britney Everett   |
+|         199 | Douglas Grant     |
+|         201 | Michael Hartstein |
+|         202 | Pat Fay           |
+|         206 | William Gietz     |
++-------------+-------------------+
+54 rows in set (0.00 sec)
+
+15. Write a query to display the employee number, name (first name and last name), and
+salary for all employees who earn more than the average salary and who work in a
+department with any employee with a J in their name.(Hint: Use of String operator)
+
+select
+	employee_ID,
+    concat(FIRST_NAME, ' ', LAST_NAME) as NAME,
+    salary
+from employees
+where salary > (
+	select avg(salary)
+    from employees
+) and concat(FIRST_NAME, ' ', LAST_NAME) like '%j%';
+
++-------------+-------------------+----------+
+| employee_ID | NAME              | salary   |
++-------------+-------------------+----------+
+|         110 | John Chen         |  8200.00 |
+|         112 | Jose Manuel Urman |  7800.00 |
+|         145 | John Russell      | 14000.00 |
+|         156 | Janette King      | 10000.00 |
+|         176 | Jonathon Taylor   |  8600.00 |
+|         177 | Jack Livingston   |  8400.00 |
++-------------+-------------------+----------+
+6 rows in set (0.00 sec)
+
+16. Display the employee name (first name and last name), employee id, and job title for
+all employees whose department location is Toronto.
+
+select
+	concat(e.FIRST_NAME, ' ', e.LAST_NAME) as Name,
+    e.EMPLOYEE_ID,
+    j.JOB_TITLE
+from employees e
+join departments d
+    on e.DEPARTMENT_ID = d.DEPARTMENT_ID
+join jobs j 
+    on e.JOB_ID = j.JOB_ID
+join locations l
+    on d.LOCATION_ID = l.LOCATION_ID
+where l.CITY = 'Toronto';
+
++-------------------+-------------+--------------------------+
+| Name              | EMPLOYEE_ID | JOB_TITLE                |
++-------------------+-------------+--------------------------+
+| Michael Hartstein |         201 | Marketing Manager        |
+| Pat Fay           |         202 | Marketing Representative |
++-------------------+-------------+--------------------------+
+2 rows in set (0.00 sec)
+
+18. Write a query to display the employee number, name (first name and last name) and
+job title for all employees whose salary is smaller than any salary of those employees
+whose job title is MK_MAN. Exclude Job title MK_MAN. (Hint: use of ANY)
+
+19. Write a query to display the employee number, name (first name and last name) and
+job title for all employees whose salary is more than any salary of those employees
+whose job title is PU_MAN. Exclude job title PU_MAN. (Hint: use of ANY)
+
+20. Write a query to display the employee number, name (first name and last name) and
+job title for all employees whose salary is more than any average salary of any
+department. (Hint: Make use of any and group by clause)
+
+21. Write a query to display the employee name( first name and last name ) and
+department for all employees for any existence of those employees whose salary is
+more than 3700. (Hint: Exists)
+
+select 
+	concat(e.FIRST_NAME, ' ', e.LAST_NAME) as Name,
+    d.DEPARTMENT_NAME
+from employees e
+join departments d
+    on e.DEPARTMENT_ID = d.DEPARTMENT_ID
+where exists(
+	select salary
+    from employees em
+    where em.SALARY > 3700
+)
+order by d.DEPARTMENT_NAME;
+
++-------------------+------------------+
+| Name              | DEPARTMENT_NAME  |
++-------------------+------------------+
+| Shelley Higgins   | Accounting       |
+| William Gietz     | Accounting       |
+| Jennifer Whalen   | Administration   |
+| Steven King       | Executive        |
+| Neena Kochhar     | Executive        |
+| Lex De Haan       | Executive        |
+| Nancy Greenberg   | Finance          |
+| Daniel Faviet     | Finance          |
+| John Chen         | Finance          |
+| Ismael Sciarra    | Finance          |
+| Jose Manuel Urman | Finance          |
+| Luis Popp         | Finance          |
+| Susan Mavris      | Human Resources  |
+| Alexander Hunold  | IT               |
+| Bruce Ernst       | IT               |
+| David Austin      | IT               |
+| Valli Pataballa   | IT               |
+| Diana Lorentz     | IT               |
+| Pat Fay           | Marketing        |
+| Michael Hartstein | Marketing        |
+| Hermann Baer      | Public Relations |
+| Den Raphaely      | Purchasing       |
+| Alexander Khoo    | Purchasing       |
+| Shelli Baida      | Purchasing       |
+| Sigal Tobias      | Purchasing       |
+| Guy Himuro        | Purchasing       |
+| Karen Colmenares  | Purchasing       |
+| Clara Vishney     | Sales            |
+| Danielle Greene   | Sales            |
+| Mattea Marvins    | Sales            |
+| David Lee         | Sales            |
+| Amit Banda        | Sales            |
+| Lisa Ozer         | Sales            |
+| Harrison Bloom    | Sales            |
+| Tayler Fox        | Sales            |
+| William Smith     | Sales            |
+| Elizabeth Bates   | Sales            |
+| Sundita Kumar     | Sales            |
+| Ellen Abel        | Sales            |
+| Alyssa Hutton     | Sales            |
+| Jonathon Taylor   | Sales            |
+| Jack Livingston   | Sales            |
+| Kimberely Grant   | Sales            |
+| Charles Johnson   | Sales            |
+| Christopher Olsen | Sales            |
+| John Russell      | Sales            |
+| Karen Partners    | Sales            |
+| Alberto Errazuriz | Sales            |
+| Gerald Cambrault  | Sales            |
+| Eleni Zlotkey     | Sales            |
+| Peter Tucker      | Sales            |
+| David Bernstein   | Sales            |
+| Peter Hall        | Sales            |
+| Sundar Ande       | Sales            |
+| Nanette Cambrault | Sales            |
+| Oliver Tuvault    | Sales            |
+| Janette King      | Sales            |
+| Patrick Sully     | Sales            |
+| Allan McEwen      | Sales            |
+| Lindsey Smith     | Sales            |
+| Louise Doran      | Sales            |
+| Sarath Sewall     | Sales            |
+| Matthew Weiss     | Shipping         |
+| Adam Fripp        | Shipping         |
+| Payam Kaufling    | Shipping         |
+| Shanta Vollman    | Shipping         |
+| Kevin Mourgos     | Shipping         |
+| Julia Nayer       | Shipping         |
+| Irene Mikkilineni | Shipping         |
+| James Landry      | Shipping         |
+| Steven Markle     | Shipping         |
+| Laura Bissot      | Shipping         |
+| Mozhe Atkinson    | Shipping         |
+| James Marlow      | Shipping         |
+| TJ Olson          | Shipping         |
+| Jason Mallin      | Shipping         |
+| Michael Rogers    | Shipping         |
+| Ki Gee            | Shipping         |
+| Hazel Philtanker  | Shipping         |
+| Joshua Patel      | Shipping         |
+| Peter Vargas      | Shipping         |
+| Jean Fleaur       | Shipping         |
+| Martha Sullivan   | Shipping         |
+| Girard Geoni      | Shipping         |
+| Nandita Sarchand  | Shipping         |
+| Alexis Bull       | Shipping         |
+| Julia Dellinger   | Shipping         |
+| Anthony Cabrio    | Shipping         |
+| Kelly Chung       | Shipping         |
+| Jennifer Dilly    | Shipping         |
+| Timothy Gates     | Shipping         |
+| Randall Perkins   | Shipping         |
+| Sarah Bell        | Shipping         |
+| Winston Taylor    | Shipping         |
+| Samuel McCain     | Shipping         |
+| Vance Jones       | Shipping         |
+| Alana Walsh       | Shipping         |
+| Kevin Feeney      | Shipping         |
+| Donald OConnell   | Shipping         |
+| Douglas Grant     | Shipping         |
+| Randall Matos     | Shipping         |
+| Curtis Davies     | Shipping         |
+| Trenna Rajs       | Shipping         |
+| John Seo          | Shipping         |
+| Stephen Stiles    | Shipping         |
+| Renske Ladwig     | Shipping         |
+| Britney Everett   | Shipping         |
++-------------------+------------------+
+107 rows in set (0.00 sec)
+
+22. Write a query to display the department id and the total salary for those departments
+which contains at least one employee. (Hint: Group by having)
+
+select
+	e.DEPARTMENT_ID,
+    sum(e.SALARY) as total
+from employees e
+group by DEPARTMENT_ID
+having count(*) > 0
+order by sum(e.SALARY) desc;
+
++---------------+-----------+
+| DEPARTMENT_ID | total     |
++---------------+-----------+
+|            80 | 311500.00 |
+|            50 | 156400.00 |
+|            90 |  58000.00 |
+|           100 |  51608.00 |
+|            60 |  28800.00 |
+|            30 |  24900.00 |
+|           110 |  20300.00 |
+|            20 |  19000.00 |
+|            70 |  10000.00 |
+|            40 |   6500.00 |
+|            10 |   4400.00 |
++---------------+-----------+
+11 rows in set (0.00 sec)
+
+23. Write a subquery that returns a set of rows to find all departments that do actually
+have one or more employees assigned to them.
+
+select
+	d.DEPARTMENT_ID,
+    d.DEPARTMENT_NAME
+from departments d
+join employees e
+    on d.DEPARTMENT_ID = e.DEPARTMENT_ID
+group by e.DEPARTMENT_ID
+having count(*) > 0;
+
++---------------+------------------+
+| DEPARTMENT_ID | DEPARTMENT_NAME  |
++---------------+------------------+
+|            10 | Administration   |
+|            20 | Marketing        |
+|            30 | Purchasing       |
+|            40 | Human Resources  |
+|            50 | Shipping         |
+|            60 | IT               |
+|            70 | Public Relations |
+|            80 | Sales            |
+|            90 | Executive        |
+|           100 | Finance          |
+|           110 | Accounting       |
++---------------+------------------+
+11 rows in set (0.00 sec)
+
+24. Write a query that will identify all employees who work in departments located in the
+United Kingdom.
+
+select
+	concat(e.FIRST_NAME, ' ', e.LAST_NAME) as Name,
+    d.DEPARTMENT_NAME,
+    l.CITY
+from employees e
+join departments d
+	on d.DEPARTMENT_ID = e.DEPARTMENT_ID
+join locations l
+	on l.LOCATION_ID = d.LOCATION_ID
+join countries c
+	on l.COUNTRY_ID = c.COUNTRY_ID
+where c.COUNTRY_ID = 'UK';
+
++--------------+-----------------+--------+
+| Name         | DEPARTMENT_NAME | CITY   |
++--------------+-----------------+--------+
+| Susan Mavris | Human Resources | London |
++--------------+-----------------+--------+
+1 row in set (0.00 sec)
+
+25. Write a query to identify all the employees who earn more than the average and who
+work in any of the IT departments. (Hint: Strint operator %)
+
+select
+	concat(e.FIRST_NAME, ' ', e.LAST_NAME) as Name,
+    e.SALARY
+from employees e
+where e.SALARY > (
+	select avg(em.SALARY)
+    from employees em
+    join departments d
+		on e.DEPARTMENT_ID = d.DEPARTMENT_ID
+	where d.DEPARTMENT_NAME like '%IT%'
+);
+
++------------------+---------+
+| Name             | SALARY  |
++------------------+---------+
+| Alexander Hunold | 9000.00 |
++------------------+---------+
+1 row in set (0.00 sec)

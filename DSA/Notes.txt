@@ -1,0 +1,18 @@
+DLL
+
+Graphs
+
+Hash Tables
+
+Heap
+
+LL
+
+Queue
+
+Stack
+
+Trees
+- Node has left and right pointers
+- Priavte has root.
+- 

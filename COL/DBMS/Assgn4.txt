@@ -1,0 +1,333 @@
+create database shop;
+
+~~~~~~~~~~~~~~~ Creating Tables ~~~~~~~~~~~~~~~
+
+create table Suppliers(
+    S# varchar(5) primary key,
+    Name varchar(50),
+    Status varchar(20),
+    City varchar(30)
+);
+
+desc Suppliers;
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Name varchar(50),
+    Status varchar(20),
+    City varchar(30)
+)' at line 3
+
+NOTE: Here the error is there because of the `#` character being used in the columnn name without using ``` around it. Which means that the correct syntax is `S#`
+
+CORRECTED VERSION: 
+create table Suppliers(
+    `S#` varchar(5) primary key,
+    Name varchar(50) not null,
+    Status varchar(20),
+    City varchar(30) not null
+);
+
+desc Suppliers;
+
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| S#     | varchar(5)  | NO   | PRI | NULL    |       |
+| Name   | varchar(50) | NO   |     | NULL    |       |
+| Status | varchar(20) | YES  |     | NULL    |       |
+| City   | varchar(30) | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+create table Parts(
+    `P#` varchar(5) primary key,
+    Pname varchar(100) not null,
+    Colour varchar(20) not null,
+    Weight int check (Weight > 0) not null,
+    City varchar(30) not null
+);
+
+desc Parts;
+
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| P#     | varchar(5)   | NO   | PRI | NULL    |       |
+| Colour | varchar(20)  | NO   |     | NULL    |       |
+| Weight | int          | NO   |     | NULL    |       |
+| Pname  | varchar(100) | NO   |     | NULL    |       |
+| City   | varchar(30)  | NO   |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+create table Projects(
+    `J#` varchar(5) primary key,
+    Jname varchar(100) not null,
+    City varchar(50) not null
+);
+
+desc Projects;
+
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| J#    | varchar(5)   | NO   | PRI | NULL    |       |
+| Jname | varchar(100) | NO   |     | NULL    |       |
+| City  | varchar(50)  | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+create table Shipment(
+    `S#` varchar(5) not null,
+    `P#` varchar(5) not null,
+    `J#` varchar(5) not null,
+    Qty int not null,
+    foreign key (`S#`) references Suppliers(`S#`),
+    foreign key (`P#`) references Parts(`P#`),
+    foreign key (`J#`) references Projects(`J#`)
+);
+
+desc Shipment;
+
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| S#    | varchar(5) | NO   | MUL | NULL    |       |
+| P#    | varchar(5) | NO   | MUL | NULL    |       |
+| J#    | varchar(5) | NO   | MUL | NULL    |       |
+| Qty   | int        | NO   |     | NULL    |       |
++-------+------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+~~~~~~~~~~~~~~~ Inserting Values ~~~~~~~~~~~~~~~
+
+insert into Suppliers (`S#`, Name, City) values
+('S1', 'Prema', 'London'),
+('S2', 'Rodin', 'Paris'),
+('S3', 'Invicta', 'New York');
+
+select * from Suppliers;
+
++----+---------+--------+----------+
+| S# | Name    | Status | City     |
++----+---------+--------+----------+
+| S1 | Prema   | NULL   | London   |
+| S2 | Rodin   | NULL   | Paris    |
+| S3 | Invicta | NULL   | New York |
++----+---------+--------+----------+
+3 rows in set (0.00 sec)
+
+insert into Parts(`P#`, Pname, Colour, Weight, City) values
+('P1', 'Engine Cover', 'Red', 12.5, 'London'),
+('P2', 'Brake', 'Blue', 15.0, 'Paris'),
+('P3', 'Wheel', 'Green', 18.0, 'New York');
+
+select * from Parts;
+
++----+--------------+--------+--------+----------+
+| P# | Pname        | Colour | Weight | City     |
++----+--------------+--------+--------+----------+
+| P1 | Engine Cover | Red    |     13 | London   |
+| P2 | Brake        | Blue   |     15 | Paris    |
+| P3 | Wheel        | Green  |     18 | New York |
++----+--------------+--------+--------+----------+
+3 rows in set (0.00 sec)
+
+insert into parts values('2', 'test', 'blue', -23, 'Mumbai');
+ERROR 3819 (HY000): Check constraint 'parts_chk_1' is violated.insert into parts values('2', 'test', 'blue', -23, 'Mumbai');
+ERROR 3819 (HY000): Check constraint 'parts_chk_1' is violated.
+
+insert into Projects (`J#`, Jname, City) values
+('J1', 'Engine', 'London'),
+('J2', 'Braking', 'Paris'),
+('J3', 'Grip', 'New York');
+
+select * from Projects;
+
++----+---------+----------+
+| J# | Jname   | City     |
++----+---------+----------+
+| J1 | Engine  | London   |
+| J2 | Braking | Paris    |
+| J3 | Grip    | New York |
++----+---------+----------+
+3 rows in set (0.00 sec)
+
+insert into Shipment (`S#`, `P#`, `J#`, Qty) values
+('S1', 'P1', 'J1', 100),
+('S1', 'P2', 'J2', 200),
+('S2', 'P2', 'J2', 150),
+('S2', 'P3', 'J3', 250),
+('S3', 'P1', 'J3', 100);
+
+select * from Shipment;
+
++----+----+----+-----+
+| S# | P# | J# | Qty |
++----+----+----+-----+
+| S1 | P1 | J1 | 100 |
+| S1 | P2 | J2 | 200 |
+| S2 | P2 | J2 | 150 |
+| S2 | P3 | J3 | 250 |
+| S3 | P1 | J3 | 100 |
++----+----+----+-----+
+5 rows in set (0.00 sec)
+
+~~~~~~~~~~~~~~~ Queries ~~~~~~~~~~~~~~~
+
+## Get S# for suppliers who supply project J1.
+
+select `S#`
+from Shipment
+where `J#` = 'J1';
+
++----+
+| S# |
++----+
+| S1 |
++----+
+1 row in set (0.00 sec)
+
+## Get P# for parts supplied by a supplier in London.
+
+select `P#`
+from Shipment
+where `S#` in (
+    select `S#`
+    from Suppliers
+    where City = 'London'
+);
+
++----+
+| P# |
++----+
+| P1 |
+| P2 |
++----+
+2 rows in set (0.00 sec)
+
+## Get the total quantity of part P1 supplied by S1.
+
+select sum(Qty) as total
+from Shipment
+where `S#` = 'S1' and `P#` = 'P1';
+
++-------+
+| total |
++-------+
+|   100 |
++-------+
+
+## Get project names for projects supplied by supplier S1.
+
+Select Jname
+from Projects
+where `J#` in (
+    select `J#` 
+    from Shipment
+    where `S#` = 'S1'
+);
+
++---------+
+| Jname   |
++---------+
+| Engine  |
+| Braking |
++---------+
+2 rows in set (0.00 sec)
+
+## Get colors of parts supplied by S1.
+
+select Colour
+from Parts
+where `P#` in (
+    select `S#`
+    from Shipment
+    where `S#` = 'S1'
+);
+
+Empty set (0.01 sec)
+
+## Get all part-colour/part-city combinations.
+
+select Colour, City
+from Parts;
+
++--------+--------+
+| Colour | City   |
++--------+--------+
+| Red    | London |
+| Blue   | Paris  |
++--------+--------+
+2 rows in set (0.03 sec)
+
+## Get J# for projects supplied by at least one supplier
+
+select distinct `J#`
+from Shipment;
+
++--------+----------+
+| Colour | City     |
++--------+----------+
+| Red    | London   |
+| Blue   | Paris    |
+| Green  | New York |
++--------+----------+
+3 rows in set (0.00 sec)
+
+## Delete all parts whose colour is green.
+
+delete 
+from Parts
+where Colour = 'green';
+
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`shop`.`shipment`, CONSTRAINT `shipment_ibfk_2` FOREIGN KEY (`P#`) REFERENCES `parts` (`P#`))
+
+Here we have to delete all the child entries first such as those in the Shipment table.
+
+delete
+from Shipment
+where `P#` in (
+    select `P#`
+    from Parts
+    where Colour = 'Green'
+);
+
+ERROR:
+delete `P#`
+from Parts
+where Colour = 'Green';
+
+description: for some reason, I specified the name of the coloumn in the table.
+
+Correction:
+delete
+from Parts
+where Colour = 'Green';
+
+## Create one view for above query
+
+create view parts_colour as
+select distinct Colour
+from Parts
+where `P#` in (
+    select `P#`
+    from Shipment 
+    where `S#` = 'S1'
+);
+
+select * from parts_colour;
+
++--------+
+| Colour |
++--------+
+| Red    |
+| Blue   |
++--------+
+2 rows in set (0.01 sec)
+
+set operations
+view
+rollback
+commit
+savepoint
+all types of joins

@@ -1,0 +1,86 @@
+4/10/24
+
+create table employees_audit(
+    employee_id int primary key,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    last_updated date not null
+);
+
+delimiter #
+
+create trigger before_emp_upd
+    before update on employees
+    for each row
+begin
+    insert into employees_audit
+    set action = 'update',
+    employee_id = old.employee_id,
+    first_name = old.first_name,
+    last_name = old.last_name,
+    last_updated = now();
+end#
+
+delimiter ;
+
+
+create table Highschool(
+    id int primary key auto_increment,
+    name varchar(50) not null,
+    grade int not null
+);
+
+create table friends(
+    id1 int not null,
+    id2 int not null,
+    foreign key(id1) references Highschool(id),
+    foreign key(id2) references Highschool(id)
+);
+
+
+create table likes(
+    id1 int not null,
+    id2 int not null,
+    foreign key(id1) references Highschool(id),
+    foreign key(id2) references Highschool(id)
+);
+
+create table buffer(
+    id1 int not null,
+    id2 int not null
+);
+
+insert into Highschool(name, grade) values
+('AAron', 4), ('Jayqualine', 4), ('Aarun', 4);
+
+insert into friends(id1, id2) values
+(1,2), (2,1), (1,3), (3,1);
+
+
+
+delimiter #
+create trigger delete_symmetry
+    after delete on friends
+    for each row
+begin
+
+    insert into buffer(id1, id2) 
+    values (old.id2, old.id1);
+end#
+delimiter ;
+
+
+
+delimiter #
+
+create trigger insert_del
+    after insert on buffer
+    for each row
+begin
+    delete
+    from friends f
+    where f.id1 = new.id1;
+    
+    delete from buffer;
+end#
+delimiter ;

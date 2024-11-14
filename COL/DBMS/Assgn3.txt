@@ -1,0 +1,322 @@
+Name: Sanchit Sovale
+Roll No: 31
+Batch: A1
+
+~~~~~~~~~~~~~~~~~~ CREATING TABLE ~~~~~~~~~~~~~~~~~~
+
+
+CREATE TABLE emp (
+    EMPNO INT PRIMARY KEY,
+    ENAME VARCHAR(50),
+    JOB VARCHAR(50),
+    HIREDATE DATE,
+    MGR INT,
+    SAL DECIMAL(10, 2),
+    COMM DECIMAL(10, 2),
+    DEPTNO INT
+);
+
+desc emp;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| EMPNO    | int           | NO   | PRI | NULL    |       |
+| ENAME    | varchar(50)   | YES  |     | NULL    |       |
+| JOB      | varchar(50)   | YES  |     | NULL    |       |
+| HIREDATE | date          | YES  |     | NULL    |       |
+| MGR      | int           | YES  |     | NULL    |       |
+| SAL      | decimal(10,2) | YES  |     | NULL    |       |
+| COMM     | decimal(10,2) | YES  |     | NULL    |       |
+| DEPTNO   | int           | YES  | MUL | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+CREATE TABLE dept (
+    DEPTNO INT PRIMARY KEY,
+    DNAME VARCHAR(50),
+    LOC VARCHAR(50)
+);
+
+desc dept;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| DEPTNO | int         | NO   | PRI | NULL    |       |
+| DNAME  | varchar(50) | YES  |     | NULL    |       |
+| LOC    | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+
+~~~~~~~~~~~~~~~~~~ INSERTING VALUES ~~~~~~~~~~~~~~~~~~
+
+
+
+INSERT INTO emp (EMPNO, ENAME, JOB, HIREDATE, MGR, SAL, COMM, DEPTNO) VALUES
+(7369, 'SMITH', 'CLERK', '1980-12-17', 7902, 800, NULL, 20),
+(7499, 'ALLEN', 'SALESMAN', '1981-02-20', 7698, 1600, 300, 30),
+(7521, 'WARD', 'SALESMAN', '1981-02-22', 7698, 1250, 500, 30),
+(7566, 'JONES', 'MANAGER', '1981-04-02', 7839, 2975, NULL, 20),
+(7654, 'MARTIN', 'SALESMAN', '1981-09-28', 7698, 1250, 1400, 30),
+(7698, 'BLAKE', 'MANAGER', '1981-05-01', 7839, 2850, NULL, 30),
+(7782, 'CLARK', 'MANAGER', '1981-06-09', 7839, 2450, NULL, 10),
+(7788, 'SCOTT', 'ANALYST', '1987-04-19', 7566, 3000, NULL, 20),
+(7839, 'KING', 'PRESIDENT', '1981-11-17', NULL, 5000, NULL, 10),
+(7844, 'TURNER', 'SALESMAN', '1981-09-08', 7698, 1500, 0, 30),
+(7876, 'ADAMS', 'CLERK', '1987-05-23', 7788, 1100, NULL, 20),
+(7900, 'JAMES', 'CLERK', '1981-12-03', 7698, 950, NULL, 30),
+(7902, 'FORD', 'ANALYST', '1981-12-03', 7566, 3000, NULL, 20),
+(7934, 'MILLER', 'CLERK', '1982-01-23', 7782, 1300, NULL, 10);
+
+select * from emp;
++-------+--------+-----------+------------+------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | HIREDATE   | MGR  | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------------+------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 1980-12-17 | 7902 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 1981-02-20 | 7698 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 1981-02-22 | 7698 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 1981-04-02 | 7839 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 1981-09-28 | 7698 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 1981-05-01 | 7839 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 1981-06-09 | 7839 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 1987-04-19 | 7566 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | 1981-11-17 | NULL | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 1981-09-08 | 7698 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 1987-05-23 | 7788 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 1981-12-03 | 7698 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 1981-12-03 | 7566 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 1982-01-23 | 7782 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------------+------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+
+INSERT INTO dept (DEPTNO, DNAME, LOC) VALUES
+(10, 'ACCOUNTING', 'NEW YORK'),
+(20, 'RESEARCH', 'DALLAS'),
+(30, 'SALES', 'CHICAGO'),
+(40, 'OPERATIONS', 'BOSTON');
+
+select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.01 sec)
+
+
+~~~~~~~~~~~~~~~~~~ QUERIES ~~~~~~~~~~~~~~~~~~
+
+
+1) List the number of employees and average salary for employees in department 20.
+
+select deptno, count(*), avg(sal)
+from emp
+where deptno = 20;
+
++--------+----------+-------------+
+| deptno | count(*) | avg(sal)    |
++--------+----------+-------------+
+|     20 |        5 | 2175.000000 |
++--------+----------+-------------+
+
+2) List name, salary and PF amount of all employees. (PF is calculated as 10% of basic salary)
+
+select ename, sal, (sal*15/100) as PF
+from emp;
+
++--------+---------+------------+
+| ename  | sal     | PF         |
++--------+---------+------------+
+| SMITH  |  800.00 | 120.000000 |
+| ALLEN  | 1600.00 | 240.000000 |
+| WARD   | 1250.00 | 187.500000 |
+| JONES  | 2975.00 | 446.250000 |
+| MARTIN | 1250.00 | 187.500000 |
+| BLAKE  | 2850.00 | 427.500000 |
+| CLARK  | 2450.00 | 367.500000 |
+| SCOTT  | 3000.00 | 450.000000 |
+| KING   | 5000.00 | 750.000000 |
+| TURNER | 1500.00 | 225.000000 |
+| ADAMS  | 1100.00 | 165.000000 |
+| JAMES  |  950.00 | 142.500000 |
+| FORD   | 3000.00 | 450.000000 |
+| MILLER | 1300.00 | 195.000000 |
++--------+---------+------------+
+
+3) List the employee details in the ascending order of their basic salary.
+
+select *
+from emp
+order by sal;
+
++-------+--------+-----------+------------+------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | HIREDATE   | MGR  | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------------+------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 1980-12-17 | 7902 |  800.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 1981-12-03 | 7698 |  950.00 |    NULL |     30 |
+|  7876 | ADAMS  | CLERK     | 1987-05-23 | 7788 | 1100.00 |    NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 1981-02-22 | 7698 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN  | 1981-09-28 | 7698 | 1250.00 | 1400.00 |     30 |
+|  7934 | MILLER | CLERK     | 1982-01-23 | 7782 | 1300.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 1981-09-08 | 7698 | 1500.00 |    0.00 |     30 |
+|  7499 | ALLEN  | SALESMAN  | 1981-02-20 | 7698 | 1600.00 |  300.00 |     30 |
+|  7782 | CLARK  | MANAGER   | 1981-06-09 | 7839 | 2450.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 1981-05-01 | 7839 | 2850.00 |    NULL |     30 |
+|  7566 | JONES  | MANAGER   | 1981-04-02 | 7839 | 2975.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 1987-04-19 | 7566 | 3000.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST   | 1981-12-03 | 7566 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | 1981-11-17 | NULL | 5000.00 |    NULL |     10 |
++-------+--------+-----------+------------+------+---------+---------+--------+
+
+4) List the employee name and hire date in the descending order of the hire date.
+
+select *
+from emp
+order by hiredate desc;
+
++-------+--------+-----------+------------+------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | HIREDATE   | MGR  | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------------+------+---------+---------+--------+
+|  7876 | ADAMS  | CLERK     | 1987-05-23 | 7788 | 1100.00 |    NULL |     20 |
+|  7788 | SCOTT  | ANALYST   | 1987-04-19 | 7566 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 1982-01-23 | 7782 | 1300.00 |    NULL |     10 |
+|  7900 | JAMES  | CLERK     | 1981-12-03 | 7698 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 1981-12-03 | 7566 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | 1981-11-17 | NULL | 5000.00 |    NULL |     10 |
+|  7654 | MARTIN | SALESMAN  | 1981-09-28 | 7698 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN  | 1981-09-08 | 7698 | 1500.00 |    0.00 |     30 |
+|  7782 | CLARK  | MANAGER   | 1981-06-09 | 7839 | 2450.00 |    NULL |     10 |
+|  7698 | BLAKE  | MANAGER   | 1981-05-01 | 7839 | 2850.00 |    NULL |     30 |
+|  7566 | JONES  | MANAGER   | 1981-04-02 | 7839 | 2975.00 |    NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 1981-02-22 | 7698 | 1250.00 |  500.00 |     30 |
+|  7499 | ALLEN  | SALESMAN  | 1981-02-20 | 7698 | 1600.00 |  300.00 |     30 |
+|  7369 | SMITH  | CLERK     | 1980-12-17 | 7902 |  800.00 |    NULL |     20 |
++-------+--------+-----------+------------+------+---------+---------+--------+
+
+5) List employee name, salary, PF, HRA, DA and gross; order the results in the ascending order of
+gross. HRA is 50% of the salary and DA is 30% of the salary.
+
+select ename, sal
+    (sal*10/100) as PF,
+    (sal * 50/100) as HRA,
+    (sal * 30/100) as DA,
+    sal + (sal * 50/100) + (sal * 30/100) as gross
+from emp
+order by gross;
+
+6) List the department numbers and number of employees in each department.
+
+select deptno, count(*)
+from emp
+group by deptno;
+
++--------+----------+
+| deptno | count(*) |
++--------+----------+
+|     10 |        3 |
+|     20 |        5 |
+|     30 |        6 |
++--------+----------+
+
+7) Increment the Salary of salesman by 10% of basic salary.
+
+update emp
+set sal = sal + (sal * 10/100)
+where job = 'SALESMAN';
+
+select ename, job, sal
+from emp;
++--------+-----------+---------+
+| ename  | job       | sal     |
++--------+-----------+---------+
+| SMITH  | CLERK     |  800.00 |
+| ALLEN  | SALESMAN  | 1760.00 |
+| WARD   | SALESMAN  | 1375.00 |
+| JONES  | MANAGER   | 2975.00 |
+| MARTIN | SALESMAN  | 1375.00 |
+| BLAKE  | MANAGER   | 2850.00 |
+| CLARK  | MANAGER   | 2450.00 |
+| SCOTT  | ANALYST   | 3000.00 |
+| KING   | PRESIDENT | 5000.00 |
+| TURNER | SALESMAN  | 1650.00 |
+| ADAMS  | CLERK     | 1100.00 |
+| JAMES  | CLERK     |  950.00 |
+| FORD   | ANALYST   | 3000.00 |
+| MILLER | CLERK     | 1300.00 |
++--------+-----------+---------+
+14 rows in set (0.00 sec)
+
+8) List the total salary, maximum and minimum salary and average salary of the employees, for
+department 20.
+
+select sum(sal), max(sal), min(sal), avg(sal), deptno
+from emp
+where deptno = 20;
+
++----------+----------+----------+-------------+--------+
+| sum(sal) | max(sal) | min(sal) | avg(sal)    | deptno |
++----------+----------+----------+-------------+--------+
+| 10875.00 |  3000.00 |   800.00 | 2175.000000 |     20 |
++----------+----------+----------+-------------+--------+
+1 row in set (0.01 sec)
+
+9) List the employees whose names contains 3rd letter as ‘I’.
+
+select ename
+from emp
+where ename like '__i%';
+
++-------+
+| ename |
++-------+
+| SMITH |
++-------+
+1 row in set (0.00 sec)
+
+10) List the maximum salary paid to a salesman.
+
+select ename, sal
+from emp
+where sal = (
+    select max(sal)
+    from emp
+);
+
++-------+---------+
+| ename | sal     |
++-------+---------+
+| KING  | 5000.00 |
++-------+---------+
+1 row in set (0.00 sec)
+
+11) Increase the salary of salesman by 10% of their current salary.
+
+update emp
+set sal = (sal * 10/100);
+
+select ename, job, sal
+from emp;
++--------+-----------+--------+
+| ename  | job       | sal    |
++--------+-----------+--------+
+| SMITH  | CLERK     |  80.00 |
+| ALLEN  | SALESMAN  | 176.00 |
+| WARD   | SALESMAN  | 137.50 |
+| JONES  | MANAGER   | 297.50 |
+| MARTIN | SALESMAN  | 137.50 |
+| BLAKE  | MANAGER   | 285.00 |
+| CLARK  | MANAGER   | 245.00 |
+| SCOTT  | ANALYST   | 300.00 |
+| KING   | PRESIDENT | 500.00 |
+| TURNER | SALESMAN  | 165.00 |
+| ADAMS  | CLERK     | 110.00 |
+| JAMES  | CLERK     |  95.00 |
+| FORD   | ANALYST   | 300.00 |
+| MILLER | CLERK     | 130.00 |
++--------+-----------+--------+
+14 rows in set (0.00 sec)

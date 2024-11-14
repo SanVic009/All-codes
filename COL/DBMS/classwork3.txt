@@ -1,0 +1,120 @@
+when done with assignment, start with cursor problem
+
+
+
+
+select 
+    l.city,
+    d.department_name,
+    e.employee_id
+from departments d
+join employees e
+    on e.department_id = d.department_id
+left outer join locations l
+    on d.location_id = l.location_id;
+
+select 
+    distinct(l.city)
+from departments d
+join employees e
+    on e.department_id = d.department_id
+left outer join locations l
+    on d.location_id = l.location_id;
+
+select 
+    distinct(l.city)
+from locations l
+left outer join departments d
+    on d.location_id = l.location_id
+left outer join employees e
+    on e.department_id = d.department_id;
+
+
+select 
+    distinct(d.department_name)
+from locations l
+left outer join departments d
+    on d.location_id = l.location_id
+left outer join employees e
+    on e.department_id = d.department_id;
+
+create view ljoin as 
+    select *
+    from departments d
+    join employees e
+        on e.department_id = d.department_id
+    left outer join locations l
+        on d.location_id = l.location_id;
+
+
+
+
+delimiter #
+
+create function loyalty(date_of_hire date) returns int  
+    deterministic
+begin
+
+    declare v_date_of_hire date;
+    declare time_in_company int;
+    
+    set v_date_of_hire = date_of_hire;
+    set time_in_company = abs(timestampdiff(year, curdate(), v_date_of_hire));
+
+    return (time_in_company);
+end#
+delimiter ;
+
+
+
+
+delimiter #
+create procedure loyalty_table_proc()
+begin
+    declare v_employee_name varchar(100);
+    declare v_employee_id int;
+    declare v_date_of_hire date;
+    declare done int default 0;
+
+    declare c1 cursor for
+        select
+            concat(e.first_name, ' ', e.last_name),
+            e.employee_id,
+            e.hire_date
+        from employees e;
+
+    declare continue handler for not found set done = 1;
+
+    open c1;
+    repeat
+        fetch c1 into v_employee_name, v_employee_id,v_date_of_hire ;
+
+        insert into loyalty_table (employee_id, employee_name,date_of_hire, time_in_company) 
+
+        values (v_employee_id, v_employee_name, v_date_of_hire, loyalty(v_date_of_hire));
+
+    until done end repeat;
+    close c1;
+
+end #
+delimiter ;
+
+
+
+create table loyalty_table(
+    employee_id int not null,
+    employee_name varchar(100) not null,
+    date_of_hire date not null,
+    time_in_company int not null
+);
+
+
+
+
+
+
+
+select
+    loyalty(hire_date)
+from employees
+limit 1;

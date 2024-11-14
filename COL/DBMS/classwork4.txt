@@ -1,0 +1,126 @@
+27/9/24
+
+create table all_time(
+    EMPLOYEE_ID int primary key,
+    FIRST_NAME varchar(20),
+    LAST_NAME varchar(20) not null,
+    HIRE_DATE date not null,
+    JOB_ID varchar(10) not null,
+    SALARY decimal(8,2) not null,
+    MANAGER_ID int,
+    DEPARTMENT_ID int
+);
+
+create table Highschool(
+    id int primary key auto_increment,
+    name varchar(50) not null,
+    grade int not null
+);
+
+create table friends(
+    id1 int not null,
+    id2 int not null
+    foreign key id1
+        references Highschool(id),
+    foreign key id2
+        references Highschool(id),
+);
+
+create table likes(
+    id1 int not null,
+    id2 int not null,
+    foreign key id1
+        references Highschool(id),
+    foreign key id2
+        references Highschool(id),
+);
+
+insert into Highschool(id, name, grade) values
+()
+
+
+
+delimiter #
+create trigger insert_symmetry
+    after insert on friends
+    for each row
+begin
+
+    if not exists (select id1 
+                from friends 
+                where id1 = new.id2
+                and id2 = new.id1
+                ) then
+        insert into likes(id1, id2) values (new.id2, new.id1);
+    end if;
+end#
+delimiter ;
+
+
+
+delimiter #
+create trigger likes_symmetry
+    after insert on likes
+    for each row
+begin
+        if not exists (select id1 
+                from friends 
+                where id1 = new.id2
+                and id2 = new.id1
+                ) then
+        insert into likes(id1, id2) values (new.id2, new.id1);
+    end if;
+end#
+delimiter ;
+
+
+delimiter #
+create trigger insert_symmetry
+    after insert on friends
+    for each row
+begin
+
+    if @trigger_flag is null then
+        set @trigger_flag = 1;
+        insert into friends(id1, id2) values (new.id2, new.id1);
+    end if;
+end#
+delimiter ;
+
+
+
+
+delimiter #
+create trigger delete_symmetry
+    after delete on friends
+    for each row
+begin
+
+    delete from friends
+    where id1 = old.id2 
+    and id2 = old.id1;
+end#
+delimiter ;
+
+insert into friends(id1, id2) values
+(2,3), (3,4), (4,5), (5,4);
+
+
+
+
+
+
+delimiter #
+create trigger symmetric-insert after insert 
+    on friends
+    for each row
+begin
+    if (
+        select f.id2
+        from friends f
+        where id1 = last_insert_id();
+    )
+    insert into 
+delimiter;
+
+drop database friends;

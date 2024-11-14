@@ -1,0 +1,27 @@
+                    ~~~~~~~~~~~~~~~~~~~~ Dairy Mangement System ~~~~~~~~~~~~~~~~~~~~
+You are give the following requirement for a dairy company:
+
+- the company maintains a database of the farmers: name, contact no, farmerID, account no, amount of milk supplied, cattle(FK) , no of buffaloes/cows(der), village, district;
+
+- Each cattle can either be a cow or a buffalo having its own cattleID, vaccinationStatus, medical history, age
+
+- There are different breeds of cows and buffaloes 
+
+- district production: each farmer belongs to a district. Each district contains farmers, middlemanID(FK), has a districtID and the total quantity of milk produced (cap off amount)
+
+- Every district is assigned with a special lab for testing milk quality produced. It has its own labID, districtID
+
+- The lab report has reportID, labID and consist of the following tests: pathogens, temperature, pHlevel, fatcontents, proteins, lactose, DNF(water contents), chem analysis, heavy metals;
+
+- Each Branch will have its own branchID, location, no of emps, prodID and has many employees (each having its own empId, department, salary, designationk, name, AdhaarNo);
+
+- The company make multiple products. These are: (all types). These products have its own barcode, mfgdate, costOfProd, prodName, prodID, shelfLife , dateOfExpiry(der);
+
+- The government provides financial aid through schemes to the farmers and the cooperatives each having its own schemeID, amount of aid provided, tax rebate, ();
+
+- The overall price of the milk is influenced by the current market price, various gov schemes and necessary taxes;
+
+- The products produced by the company are supplied further by distributors. They have their own unique id , name;
+
+godown
+fin influencer

@@ -1,0 +1,6 @@
+Collector_id,Collector_name,Location,Milk_received,Calorie_content,Date_of_joining,Account_no,District_id
+1,Collector 1,Location 1,850,54,2019-06-15,4542287084,5
+2,Collector 2,Location 2,303,59,2018-01-16,6870582436,5
+3,Collector 3,Location 3,217,87,2019-07-05,7697240053,2
+4,Collector 4,Location 4,525,50,2020-07-29,6537794955,5
+5,Collector 5,Location 5,811,51,2019-08-16,2578835682,5

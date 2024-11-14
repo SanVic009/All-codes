@@ -1,0 +1,26 @@
+[
+    {
+        "firstName":"Ved",
+        "lastName": "Bhoyar",
+        "age": 83,
+        "history":[
+            {"diseases": "fever","previousHospitalisation": true} 
+        ]
+    },
+    {
+        "firstName":"Laurentino",
+        "lastName": "Rennoll",
+        "age": 31,
+        "history":[
+            {"diseases": "cold", "previousHospitalisation": true} 
+        ]
+    },
+    {
+        "firstName":"Pratibha",
+        "lastName": "Dunajska",
+        "age": 11,
+        "history":[
+            {"diseases": "cold","previousHospitalisation": false} 
+        ]
+    }
+]

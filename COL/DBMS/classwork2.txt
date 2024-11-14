@@ -1,0 +1,83 @@
+13/9/2024
+
+delimiter #
+create procedure new_sal2(IN e_id int)
+begin
+
+    declare sal int;
+    declare h_date date;
+    declare prev_sal int;
+    declare v_employee_name varchar(100);
+
+    select
+        e.hire_date,
+        e.salary,
+        concat(e.first_name, ' ', e.last_name)
+    into
+        h_date,
+        prev_sal,
+        v_employee_name
+    from employees e
+    where e.employee_id = e_id;
+
+    if abs(timestampdiff(year, curdate(), h_date)) < 2 then
+        set sal = prev_sal + (prev_sal * 0.05);
+    elseif abs(timestampdiff(year, curdate(), h_date)) between 2 and 5 then
+        set sal = prev_sal + (prev_sal * 0.07);
+    elseif abs(timestampdiff(year, curdate(), h_date)) > 5 then
+       set sal = prev_sal + (prev_sal * 0.1);
+    else 
+        select("There was an error!!");
+    end if;
+
+    insert into new_sal(employee_id, employee_name, date_of_hire, prev_sal, new_sal, time_in_company) values
+    (e_id, v_employee_name, h_date, prev_sal, sal, abs(timestampdiff(year, curdate(), h_date)));
+    
+end#
+delimiter ;
+
+call new_sal(106);
+
+alter table new_sal
+add column time_in_company int not null;
+
+
+
+
+
+delimiter #
+create procedure new_sal_table2()
+begin
+    declare v_employee_id int;
+    declare done int default 0;
+
+    declare c1 cursor for
+        select
+            e.employee_id
+        from employees e;
+
+    declare continue handler for not found set done = 1;
+
+    open c1;
+    repeat
+        fetch c1 into v_employee_id;
+        if done=0 then 
+            call new_sal2(v_employee_id);
+        end if;
+    until done end repeat;
+    close c1;
+
+end#    
+delimiter ;
+
+call new_sal_table2()
+
+
+create table new_sal(
+    employee_id int primary key,
+    employee_name varchar(39) not null,
+    date_of_hire date not null,
+    prev_sal int not null,
+    new_sal int not null,
+    time_in_company date not null
+);

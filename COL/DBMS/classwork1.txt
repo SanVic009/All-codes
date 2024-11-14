@@ -1,0 +1,115 @@
+6/9/2024
+
+delimiter #
+
+create procedure Proc1()
+begin
+select * from countries;
+end;
+#
+
+call Proc1()#
+
+NOTE: the name of a procedure must be unique
+
+create procedure Proc2()
+begin 
+select * from locations;
+end;
+#
+
+call Proc2()#
+
++---------------+
+| Tables_in_emp |
++---------------+
+| countries     |
+| departments   |
+| employees     |
+| job_history   |
+| jobs          |
+| locations     |
++---------------+
+
+select
+    sum(e.salary) as Total,
+    d.department_name
+from employees e
+join departments d
+    on d.department_id = e.department_id
+group by e.department_id#
+
+NOTE: 3 types of parametes can be passed in a procedure. These are 
+IN       OUT     IN/OUT
+
+create procedure proc(IN n int)
+
+IN       n       int
+       name    datatype
+
+
+~~~~~~~~~~~~~~~ Creating the table ~~~~~~~~~~~~~~~
+
+delimiter #
+create table dept_sal as
+    select
+        d.department_id,
+    0 as Total_Salary
+    from departments d
+    order by d.department_id;
+#
+delimiter ;
+
+~~~~~~~~~~~~~~~ Creating a Procedure ~~~~~~~~~~~~~~~
+
+delimiter #
+create procedure update_sal(IN d_id int)
+begin 
+update dept_sal
+set totalsalary = (
+    select sum(e.salary)
+    from employees e
+    where e.department_id = d_id
+)
+where department_id = d_id;
+end;
+#
+delimiter ;
+
+
+delimiter #
+create procedure Max_sal (OUT high_sal int)
+begin
+    select
+        max(e.salary) into high_sal
+    from employees e;
+end#
+delimiter ;
+
+call Max_sal(@M)#;
+select @M;
+
+
+delimiter #
+create procedure counter(inout count int, in increment int)
+begin
+    set count = count + increment ;
+end#
+delimiter ;
+
+call counter(@C, 1);
+select @C;
+
+delimiter #
+create function my_rand() returns int
+    deterministic
+    begin
+        return round(rand()*1000, 0);
+    end#
+delimiter ;
+
+
+
+
+delimiter #
+delimiter ;
