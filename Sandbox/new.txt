@@ -1,0 +1,59 @@
+delimiter #
+
+create precedure update_sal()
+begin
+    declare done int default 0;
+    declare eid int;
+    declare sal int;
+    declare emprec cursor for select id, salary from employees;
+    declare continue handler fornot found set done = 1;
+
+    open emprec;
+    repeat 
+        fetch emprec into eid, sal;
+        update employee
+        set salary = sal + round(sal * amount)
+        where id = eid;
+    until done
+    end repeat;
+end #
+delimiter ;
+
+create table emp_sal(
+    employee_id int primary key,
+    prev_sal int not null,
+    new_sal int not null,
+    hire_date date not null
+);
+
+create procedure emp_sal()
+begin
+    declare done int default 0;
+    declare v_salary int;
+    declare v_employee_id int;
+    declare v_hire_date date;
+    declare cur cursor for 
+        select 
+            employee_id,
+            salary, 
+            hire_date
+        from employees;
+
+    declare continue handler for not found set done = 1;
+    
+    open cur;
+    repeat
+        fetch cur into v_employee_id, v_salary, v_hire_date;
+
+        insert into emp_sal values
+        (v_employee_id, v_salary, v_hire_date)
+
+        until done
+        end repeat;
+
+    close c1;
+        
+end #
+delimiter ;
+
+
