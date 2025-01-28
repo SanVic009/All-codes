@@ -1,23 +1,30 @@
-# from pynput import keyboard
+def maximumLengthSubstring(s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        length = 0
+        max_length = 0
+        occurence = {}
+        for letters in s:
+            
+            if (letters not in occurence) or (occurence[letters] == 0):
+                occurence[letters] = 1
+                
+            elif (letters in occurence) and (occurence[letters] <= 2):
+                occurence[letters] += 1
+            
+            if occurence[letters] > 2:
+                for letters in occurence:
+                    occurence[letters] = 0
+                length = 0
+                continue
 
-# def on_press(key):
-#     try:
-#         print(f"Key: {key.char}, KeyCode: {key.vk}")
-#     except AttributeError:
-#         print(f"Special Key: {key}")
+            length += 1
+            if length > max_length:
+                max_length = length
+       
+        return max_length
 
-# with keyboard.Listener(on_press=on_press) as listener:
-# #     listener.join()
-
-# import keyboard
-
-# def log_event(event):
-#     print(f"key: {event.name}, Scan Code: {event.scan_code}")
-
-# keyboard.hook(log_event)
-# keyboard.wait('esc')
-print("Enter the value: ")
-xx = float(input())
-
-
-print(xx)
+string = "bbbab"
+print(maximumLengthSubstring(string))
