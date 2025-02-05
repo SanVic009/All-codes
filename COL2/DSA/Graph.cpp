@@ -1,55 +1,49 @@
-#include<iostream>
-#include <unordered_map>
-#include<vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-class Friends{
+class User
+{
 private:
-    string Name;
-    Friends* next;
-
-    Friends(string name){
-        this->Name = name;
-        this->next = nullptr;
-    }
-};
-
-class User{
-private:
-    unordered_map< string , Friends> adjList;
+    string name;
+    int id;
+    vector<int> friends;
 
 public:
-    // User(int n){
-    //     cout<<"Enter the number of users in the list :"<<endl;
-    //     cin>>n;
+    friend class Graph
+};
 
-    //     for (int i = 0; i < n; i ++){
-    //         cout<<"Enter the name of user "<< i<<endl;
-    //         string name;
+class Graph
+{
+private:
+    User users[20];
+    int total_user = 0;
 
-    //         Friends fr();
+public:
+    void create_users()
+    {
+        cout << "Enter the number of users you want to enter";
+        int n;
+        cin >> n;
 
+        for (int i = 0; i < n; i++)
+        {
+            if (total_user >= 20)
+            {
+                cout << "Users list if full.";
+                break;
+            }
 
-
-    //     }
-    // }
-
-    bool add_user(string name){
-        if(adjList.count(name) == 0){
-            adjList[name];
-            return true;
+            cout << "Enter the name";
+            cin >> users[i].name;
+            users[i].id = total_user;
+            total_user++;
         }
-        return false;
-
-    }
-    
-    void append_friend(){
-        
     }
 };
 
+int main()
+{
 
-int main(){
     return 0;
 }
