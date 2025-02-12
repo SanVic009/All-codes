@@ -69,5 +69,6 @@
         "typeindex": "cpp",
         "valarray": "cpp"
     },
-    "workbench.tree.indent": 4
+    "workbench.tree.indent": 4,
+    "C_Cpp.default.compilerPath": "C:/MinGW/bin/g++.exe"
 }

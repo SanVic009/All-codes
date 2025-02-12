@@ -3,6 +3,8 @@
 
 using namespace std;
 
+
+
 class Node
 {
 public:
@@ -15,6 +17,8 @@ public:
         this->next = nullptr;
     }
 };
+
+
 
 class Queue
 {
@@ -55,6 +59,8 @@ public:
             return 0;
     }
 };
+
+
 
 class Stack
 {
@@ -99,6 +105,8 @@ public:
     }
 };
 
+
+
 class Users
 {
 private:
@@ -109,6 +117,8 @@ private:
 public:
     friend class Graph;
 };
+
+
 
 class Graph
 {
@@ -265,7 +275,9 @@ void Graph:: bfs(){
 }
 
 
+
 int main()
+
 {
 
     int n = 0;
