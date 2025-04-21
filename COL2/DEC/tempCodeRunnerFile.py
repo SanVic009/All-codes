@@ -1,0 +1,2 @@
+ked)
+plt.show
