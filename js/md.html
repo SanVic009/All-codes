@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drop Zone</title>
+  <style>
+    #dropArea {
+      border: 5px solid pink;
+      width: 222px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .highlight {
+      border-color: red;
+      background-color: #fdd;
+    }
+  </style>
+</head>
+<body>
+  <button id="upload" value="upload">Upload for free</button>
+  <div id="dropArea">
+    <p>THIS IS THE DROP ZONE</p>
+  </div>
+
+  <script>
+    const dropArea = document.querySelector("#dropArea");
+
+    // 🔴 This prevents the default browser behavior globally (very important for Firefox)
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      document.addEventListener(eventName, e => e.preventDefault(), false);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
+    });
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const files = e.dataTransfer.files;
+      console.log("Files dropped", files);
+    }
+  </script>
+</body>
+</html>
